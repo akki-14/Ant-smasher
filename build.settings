@@ -1,0 +1,41 @@
+-- build.settings for project: bubble ball
+-- Managed with http://CoronaProjectManager.com
+-- Copyright 2013 . All Rights Reserved.
+
+settings = {
+	orientation =
+	{
+		--default = "landscapeRight",
+	},
+	
+	
+	 plugins =
+    {
+    	["plugin.google.play.services"] =
+        {
+            publisherId = "com.coronalabs"
+        },  -- key is the name passed to Lua's 'require()'
+		["CoronaProvider.gameNetwork.google"] =
+		{
+			-- required
+			publisherId = "com.coronalabs",
+			supportedPlatforms = { android = true }
+		},  	     
+        
+    },
+	
+	android =
+        {
+                versionCode = "6",
+                googlePlayGamesAppId = "542905232803", -- Your Google Play Games App Id
+        },
+
+        androidPermissions =
+        {
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+			"android.permission.READ_PHONE_STATE",
+			"android.permission.VIBRATE",
+        },
+	
+	
+}
