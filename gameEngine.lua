@@ -8,7 +8,6 @@ require("antCreateOrbit")
 require("antCreateFast")
 require("flyCreate")
 require("gainLife")
-require("SpriteAnim")
 
 local gameEngineTimer = nil
 local tempGroup
@@ -63,7 +62,7 @@ GameEngine = {
 						end
 					end
 					
-					local gameEngineTimer = timer.performWithDelay(delayTime,type1,numOfAnts)
+					gameEngineTimer = timer.performWithDelay(delayTime,type1,numOfAnts)
 					gameEngineTimer.params = {param1 = numOfAnts,param2 = antPattern,param3 = posX, param4 = antType}
 				elseif score  < 1800 then
 					

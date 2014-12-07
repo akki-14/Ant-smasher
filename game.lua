@@ -19,8 +19,8 @@ local scoreBar
 local scoreText
 local maxScoreText
 local getMaxScore
--- local pauseButton
--- local pauseBar
+local pauseButton
+local pauseBar
 --global
 lives = {}
 numLives = 3
@@ -57,19 +57,9 @@ function scene:createScene(event)
 		lives[i] = display.newImage(group,"images/life.png",display.contentCenterX - 90 + (50 * i) , bufferHeight + 65)
 	end
 	maxScoreText = display.newText(group,getMaxScore , display.viewableContentWidth - 135 , bufferHeight + 65 ,"Base 02",30)
-	-- pauseButton = display.newImage(group,"images/pause.png",display.contentCenterX, bufferHeight + 140)
-	-- pauseButton.pauseState = true
-	-- pauseBar = display.newImage(group,"images/pause_bar.png",display.contentCenterX, -display.contentCenterY)
-
-	function aaa(event)
-	--CreateAntZigZag.new(group,"ant1")
-	--CreateAntCross.new(group)
-	--CreateAnt.new(group,"scorpio")
-	--CreateAntTwin.new(group,"scorpio")
-	--CreateAntLine.new(group,"ant1")
-	--CreateAntFast.new(group,"ant1")
-	
-	end
+	pauseButton = display.newImage(group,"images/pause.png",display.contentCenterX, bufferHeight + 140)
+	pauseButton.pauseState = true
+	pauseBar = display.newImage(group,"images/pause_bar.png",-display.contentCenterX, display.contentCenterY)
 
 	--CreateAnt.new(group)
 	--timer.performWithDelay(2500,aaa,10)
@@ -135,7 +125,7 @@ function scene:enterScene(event)
 	ads.show( "banner", { x=0, y=1160,interval=50,appId="ca-app-pub-2883837174861368/5479620739"} )
 	Runtime:addEventListener( "enterFrame", scoreFront)
 	Runtime:addEventListener( "key", onKeyEvent )
-	-- pauseButton:addEventListener("tap",pauseGame)
+	pauseButton:addEventListener("tap",pauseGame)
 	print("enter")
 end
 

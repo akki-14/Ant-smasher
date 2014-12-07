@@ -31,8 +31,11 @@ local bgLogo
 local rateApp
 local ad2048
 local adNum
-
-
+local promoBanner
+local promoYes
+local promoNo
+local promoGroup 
+local shouldExit = false
 
 
 	-- Submits the score from the scoreTextField into the leaderboard
@@ -61,6 +64,7 @@ function scene:createScene(event)
 	})
 
 	bgGroup = self.view
+	promoGroup = display.newGroup()
 	bgImage = display.newImage(bgGroup,"images/bg_image.jpg",display.contentCenterX,display.contentCenterY)
 	--bgImage:scale(bufferWidthRatio,bufferHeightRatio)
 	bgTitle = display.newImage(bgGroup,"images/title.png",display.contentCenterX, bufferHeight + 230)
@@ -89,6 +93,12 @@ function scene:createScene(event)
 	googleLeaderBoardBack = display.newImage(bgGroup,"images/leaderboard_online_selected.png",bufferWidth + 100 , display.viewableContentHeight - 500)
 	googleLeaderBoardBack:scale(0.7,0.7)
 
+
+	promoBanner = display.newImage(promoGroup,"images/promo.jpg",display.contentCenterX, display.contentCenterY - 200 - bufferHeight)
+	promoYes = display.newImage(promoGroup,"images/yes.png",display.contentCenterX - promoBanner.contentWidth / 2 , display.contentCenterY - 200  - promoBanner.contentHeight / 2 - bufferHeight)
+	promoNo = display.newImage(promoGroup,"images/no.png",display.contentCenterX + promoBanner.contentWidth / 2, display.contentCenterY - 200 - promoBanner.contentHeight / 2 - bufferHeight)
+	bgGroup:insert(promoGroup)
+	promoGroup.isVisible = false
 
 	adNum = math.random(1,3)
 	adBalloon = display.newImage(bgGroup,"images/ad_balloon.png",display.contentCenterX,display.contentHeight - bufferHeight - 50)
@@ -147,7 +157,7 @@ function scene:enterScene(event)
 					if  (event.y > bounds.yMin  and event.y < bounds.yMax) then
 						audio.stop( bgChannel )
 						SoundControl.Menu()
-						storyboard.gotoScene( "game", "fade", 700 )
+						storyboard.gotoScene( "game", "fade", 400 )
 					end
 				end
 				bgStartBack.isVisible = false
@@ -242,7 +252,10 @@ function scene:enterScene(event)
 					if  (event.y > bounds.yMin  and event.y < bounds.yMax) then
 						SoundControl.Menu()
 						--storyboard.gotoScene( "restartView", "fade", 1000 )
-						native.requestExit()
+
+						promoGroup.isVisible = true
+
+						
 					end
 				end
 				bgExitBack.isVisible = false
@@ -403,7 +416,38 @@ function scene:enterScene(event)
 	function rateApp(event)
 		system.openURL("market://details?id=com.gaakapps.antsmasher" )
 	end
+	local function yes( event )
+			native.requestExit()
+						
+	end
+
+		local function no( event )
+			promoGroup.isVisible = false
+								
+		end
+
+		local function openApp( event)
+				promoGroup.isVisible = false
+				system.openURL("market://details?id=com.gaakapps.fruitshoot" )
+		end 
+	local function onKeyEvent(event)
 	
+		local phase = event.phase
+			
+		if event.phase=="up" and event.keyName=="back" then
+				promoGroup.isVisible = true
+				if shouldExit then
+					native.requestExit()
+				end
+				shouldExit = true
+			return true
+		end
+		return false
+	end
+
+	promoBanner:addEventListener("tap",openApp)
+	promoYes:addEventListener("tap",yes)
+	promoNo:addEventListener("tap",no)
 	bgStart:addEventListener("touch",goStart)
 	bgStartBack:addEventListener("touch",goStart)
 	
@@ -426,6 +470,7 @@ function scene:enterScene(event)
 	googleLoginBack:addEventListener("touch", googleServiceLogin)
 	googleLeaderBoard:addEventListener("touch", showLeaderboardListener)
 	googleLeaderBoardBack:addEventListener("touch", showLeaderboardListener)
+	Runtime:addEventListener( "key", onKeyEvent )
 
 end
 
@@ -434,6 +479,7 @@ function scene:exitScene(event)
 	
 	
 	bgLogo:removeEventListener("tap", rateApp)
+	Runtime:removeEventListener( "key", onKeyEvent )
 	
 end
 
