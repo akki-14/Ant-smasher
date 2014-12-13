@@ -6,7 +6,7 @@ CreateAntCross = {
 			local diff = 0
 			
 			if(setSeq == "scorpio") then
-				if(math.random(2) == 2) then
+				if(math.random(4) == 2) then
 					setSeq = "ant1"
 				end
 			end

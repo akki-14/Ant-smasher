@@ -8,7 +8,7 @@ CreateAntTwin = {
 			ant.taps = 0
 			--ant.rotation = 180
 			if setSeq == "scorpio" then
-				if math.random( 3 ) == 1 then 
+				if math.random( 5 ) == 1 then 
 					ant:addEventListener("tap",Smash.new)
 				else
 					setSeq = "ant1"

@@ -29,6 +29,18 @@ SpriteAnim = {
 			 frames={10}
 		 },
 		 {
+			 name="antBoss", 
+			 start=6,
+			 count=4,
+			 time=400,
+			 loopCount=0
+		 },
+		 
+		 {
+			 name="antBossSmash", 
+			 frames={10}
+		 },
+		 {
 			 name="scorpio", 
 			 start=11,
 			 count=4,

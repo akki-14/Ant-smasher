@@ -7,6 +7,8 @@ require("antCreateCross")
 require("antCreateOrbit")
 require("antCreateFast")
 require("flyCreate")
+require("antCreateSShape")
+require("antCreateBoss")
 require("gainLife")
 
 local gameEngineTimer = nil
@@ -15,7 +17,7 @@ GameEngine = {
 		new = function(group)
 		tempGroup = group
 		local calculate
-		local seq = {"ant1","ant2","scorpio"}
+		local seq = {"ant1","ant2","scorpio","antBoss"}
 		local type1
 		local type2
 		local type3
@@ -271,6 +273,7 @@ GameEngine = {
 		
 		function aaa(event)
 			CreateAnt.new(group,seq[1])
+			--CreateAntBoss.new(group,seq[4])
 			--CreateAntOrbit.new(group,"bee")
 			--FlyCreate.new(group,seq[1])
 			if(event.count == 2) then

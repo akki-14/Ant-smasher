@@ -1,11 +1,3 @@
-require("antCreate")
-require("antCreateTwin")
-require("antCreateLine")
-require("antCreateRoam")
-require("antCreateZigZag")
-require("antCreateCross")
-require("antCreateOrbit")
-require("antCreateFast")
 require("gameEngine")
 local scene = storyboard.newScene()
 storyboard.purgeOnSceneChange = true

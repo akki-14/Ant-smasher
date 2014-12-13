@@ -19,6 +19,8 @@ timerId = nil
 gamePause = false
 
 ads.init( "admob", "ca-app-pub-2883837174861368/5479620739" )  --ant smasher
+TOTAL_WIDTH = display.viewableContentWidth
+TOTAL_HEIGHT = display.viewableContentHeight
 bufferWidth = (display.contentWidth - display.viewableContentWidth ) / 2
 bufferWidthRatio = display.viewableContentWidth / display.contentWidth 
 bufferHeight = (display.contentHeight - display.viewableContentHeight ) / 2

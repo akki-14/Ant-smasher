@@ -19,7 +19,7 @@ CreateAntFast = {
 			local ant = SpriteAnim.new()
 			ant.taps = 0
 			if setSeq == "scorpio" then
-				if math.random( 2 ) == 1 then 
+				if math.random( 3 ) == 1 then 
 					ant:addEventListener("tap",Smash.new)
 				else
 					setSeq = "ant1"

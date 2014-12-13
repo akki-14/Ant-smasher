@@ -10,6 +10,13 @@ Smash = {
 					smashedAnt.y = target.y
 					smashedAnt.rotation = target.rotation
 					smashedAnt:setSequence(getSeq .. "Smash")
+					if (getSeq=="antBoss") then
+						smashedAnt:scale(2,2)
+						timer.performWithDelay(50,function()
+							CreateAnt.new(group,"ant1",smashedAnt)
+						end,math.random(2,5))
+
+					end
 					group:insert( smashedAnt )
 					transition.to(smashedAnt,{alpha = 0,time=math.random(1500,3500), transition=easing.inQuad, onComplete = function() smashedAnt:removeSelf(); smashedAnt = nil end })
 				end
@@ -43,16 +50,31 @@ Smash = {
 				if getSeq == "scorpio" then
 					target.taps = target.taps + 1
 					
-						transition.to(target,{alpha = 0,time = 100,onComplete = function()
-										transition.to(target,{alpha = 1,time = 100,onComplete = 
+						transition.to(target,{alpha = 0,time = 40,onComplete = function()
+										transition.to(target,{alpha = 1,time = 60,onComplete = 
 											function()
-												transition.to(target,{alpha = 0,time = 100,onComplete = 
+												transition.to(target,{alpha = 0,time = 30,onComplete = 
 												function()
-													transition.to(target,{alpha = 1,time = 100})
+													transition.to(target,{alpha = 1,time = 60})
 												end})
 											end})
 									end})
 				
+				elseif getSeq == "antBoss" then
+					target.taps = target.taps + 1
+						transition.pause(target.transition)
+						transition.to(target,{alpha = 0,time = 40,onComplete = function()
+										transition.to(target,{alpha = 1,time = 80,onComplete = 
+											function()
+												transition.to(target,{alpha = 0,time = 40,onComplete = 
+												function()
+													transition.to(target,{alpha = 1,time = 100})
+													transition.resume(target.transition)
+												end})
+											end})
+									end})
+				
+					SoundControl.Smash(getSeq)
 				elseif getSeq == "bee" then
 					SoundControl.Smash(getSeq)
 					transition.cancel()
@@ -99,6 +121,13 @@ Smash = {
 					
 				elseif getSeq == "scorpio" and 	target.taps == 2 then
 					score = score + 30
+					SoundControl.Smash(getSeq)
+					initSmash()
+					transition.cancel(target)
+					target:removeSelf()
+					target = nil	
+				elseif getSeq == "antBoss" and 	target.taps == 5 then
+					score = score + 50
 					SoundControl.Smash(getSeq)
 					initSmash()
 					transition.cancel(target)
