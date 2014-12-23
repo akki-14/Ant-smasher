@@ -88,10 +88,12 @@ function scene:createScene(event)
 	googleLogin:scale(0.7,0.7)
 	googleLoginBack = display.newImage(bgGroup,"images/login_selected.png",bufferWidth + 100 , display.viewableContentHeight - 350)
 	googleLoginBack:scale(0.7,0.7)
+	googleLoginBack.isVisible = false
 	googleLeaderBoard = display.newImage(bgGroup,"images/leaderboard_online.png",bufferWidth + 100 , display.viewableContentHeight - 500)
 	googleLeaderBoard:scale(0.7,0.7)
 	googleLeaderBoardBack = display.newImage(bgGroup,"images/leaderboard_online_selected.png",bufferWidth + 100 , display.viewableContentHeight - 500)
 	googleLeaderBoardBack:scale(0.7,0.7)
+	googleLeaderBoardBack.isVisible = false
 
 
 	promoBanner = display.newImage(promoGroup,"images/promo.jpg",display.contentCenterX, display.contentCenterY - 200 - bufferHeight)
@@ -117,17 +119,20 @@ function scene:createScene(event)
 		ad2048.isVisible = true
 	end
 	
-
-	if gameNetwork.request("isConnected") then
-		googleLeaderBoard.isVisible = false
-		googleLogin.isVisible = false
-		googleLogin.isVisible = false
-		googleLoginBack.isVisible = true
-	else
-		googleLogin.isVisible = true
-		googleLoginBack.isVisible = false
-		googleLeaderBoardBack.isVisible = false
+	local function checkLoggedIn( event )
+		if gameNetwork.request("isConnected") then
+			googleLeaderBoard.isVisible = false
+			googleLogin.isVisible = false
+			googleLoginBack.isVisible = true
+		else
+			googleLogin.isVisible = true
+			googleLoginBack.isVisible = false
+			googleLeaderBoardBack.isVisible = false
+		end
 	end
+
+	timer.performWithDelay( 2000, checkLoggedIn )
+	
 	
 	
 end

@@ -272,8 +272,9 @@ GameEngine = {
 		end
 		
 		function aaa(event)
-			CreateAnt.new(group,seq[1])
-			--CreateAntBoss.new(group,seq[4])
+			--CreateAnt.new(group,seq[1])
+			CreateAntBoss.new(group,seq[4])
+			--CreateAntSShape.new(group,seq[4])
 			--CreateAntOrbit.new(group,"bee")
 			--FlyCreate.new(group,seq[1])
 			if(event.count == 2) then
