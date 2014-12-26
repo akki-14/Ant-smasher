@@ -126,7 +126,7 @@ function scene:exitScene(event)
 	ads.hide()
 	Runtime:removeEventListener( "enterFrame", scoreFront)
 	Runtime:removeEventListener( "key", onKeyEvent )
-	
+	transition.cancel()
 end
 
 function scene:destroyScene(event)

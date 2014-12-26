@@ -47,22 +47,9 @@ Smash = {
 					transition.to(smashedAnt,{rotation = 0,time=1500, onComplete = function() timer.performWithDelay(1000,temp) end })
 				end
 				
-				if getSeq == "scorpio" then
+				if getSeq == "antBoss" then
 					target.taps = target.taps + 1
-					
-						transition.to(target,{alpha = 0,time = 40,onComplete = function()
-										transition.to(target,{alpha = 1,time = 60,onComplete = 
-											function()
-												transition.to(target,{alpha = 0,time = 30,onComplete = 
-												function()
-													transition.to(target,{alpha = 1,time = 60})
-												end})
-											end})
-									end})
-				
-				elseif getSeq == "antBoss" then
-					target.taps = target.taps + 1
-						transition.pause(target.transition)
+						transition.pause(target)
 						transition.to(target,{alpha = 0,time = 40,onComplete = function()
 										transition.to(target,{alpha = 1,time = 80,onComplete = 
 											function()
@@ -109,24 +96,20 @@ Smash = {
 				
 				
 				if getSeq == "ant1" then
-					score = score + 10
+					score = score + 15
 					SoundControl.Smash(getSeq)
 					
 				elseif getSeq == "ant2" then
-					score = score + 15
-					SoundControl.Smash(getSeq)
-				elseif getSeq == "fly" then
 					score = score + 20
 					SoundControl.Smash(getSeq)
+				elseif getSeq == "fly" then
+					score = score + 25
+					SoundControl.Smash(getSeq)
 					
-				elseif getSeq == "scorpio" and 	target.taps == 2 then
+				elseif getSeq == "scorpio" then
 					score = score + 30
 					SoundControl.Smash(getSeq)
-					initSmash()
-					transition.cancel(target)
-					target:removeSelf()
-					target = nil	
-				elseif getSeq == "antBoss" and 	target.taps == 5 then
+				elseif getSeq == "antBoss" and 	target.taps == 3 then
 					score = score + 50
 					SoundControl.Smash(getSeq)
 					initSmash()

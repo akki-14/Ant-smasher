@@ -115,7 +115,7 @@ function scene:createScene(event)
 	bgBack = display.newText(opGroup,"BACK",display.contentCenterX ,display.viewableContentHeight - 80, "Easter Sunrise",80)
 	
 	selectBgText = display.newText(opGroup,"Select Background",display.contentCenterX ,bufferHeight + 260 , "Base 02",40)
-	for i = 1,5 do	
+	for i = 1,6 do	
 		background[i] = display.newImage(opGroup,"images/bg_game" .. i .. ".jpg",display.contentCenterX,display.contentCenterY)
 		background[i]:scale(0.17,0.17)
 		background[i]:addEventListener("tap",selectBg)
@@ -130,7 +130,7 @@ function scene:createScene(event)
 			border[i].x = background[i].x
 			border[i].y = background[i].y
 		else
-			local free = (display.viewableContentWidth - (background[i].contentWidth) * 2 ) / 3
+			local free = (display.viewableContentWidth - (background[i].contentWidth) * 3 ) / 4
 			background[i].y = 220 +  (5 * background[i].contentHeight) / 2
 			background[i].x = (( ( (i-3) * free) + bufferWidth ) + background[i].contentWidth * (i-4) ) + background[i].contentWidth / 2
 			border[i].x = background[i].x

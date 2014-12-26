@@ -117,8 +117,7 @@ end,
 				score_cpy[count] = v
 		end
 		
-		
-		print(#score_value)
+	
 		for j = #score_value,1,-1 do
 				for i = 1, j - 1 do
 					if(score_value[i] < score_value[i+1]) then
@@ -127,7 +126,6 @@ end,
 						score_value[i] = tmp
 					end
 				end
-				print(j,score_value[j],score_cpy[j],names[j])
 		end
 
 
@@ -162,7 +160,7 @@ end,
 
 			
 		for i = 1, #score_value do
-			print(names_sorted[i] .. "       " .. score_value[i])
+			
 		end
 		minScore:store("min",score_value[10])
 		minScore:save()
