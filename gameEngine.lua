@@ -93,8 +93,8 @@ GameEngine = {
                 
             elseif score  < 1500 then
                 
-                antPattern = getRandomAntPattern(NORMAL_ANT,BOSS_ANT,TWIN_ANT,FAST_ANT,CROSSING_ANT
-                ,LINE_ANT,S_SHAPE_ANT,FLY_ROUTE)
+                antPattern = getRandomAntPattern(BOSS_ANT,TWIN_ANT,FAST_ANT,CROSSING_ANT
+                ,LINE_ANT,S_SHAPE_ANT,FLY_ROUTE,FREE_ROAM_ANT)
                 antType = math.random(3)
                 DELAY_TIME = math.random(1000,1500)
                 posX = 0
@@ -103,6 +103,8 @@ GameEngine = {
                     DELAY_TIME = DELAY_TIME - 100
                 elseif(antPattern == FLY_ROUTE ) then
                     DELAY_TIME = DELAY_TIME - 200
+                elseif(antPattern == FREE_ROAM_ANT ) then
+                    DELAY_TIME = DELAY_TIME - 300
                 elseif(antPattern == TWIN_ANT ) then
                     DELAY_TIME = math.min(DELAY_TIME,1300)
                 elseif(antPattern == S_SHAPE_ANT ) then
@@ -113,7 +115,7 @@ GameEngine = {
                     numOfAnts = 1
                 end
                 
-            elseif score  < 2500 then
+            elseif score  < 3500 then
                 antPattern = getRandomAntPattern(CROSSING_ANT,FREE_ROAM_ANT,TWIN_ANT,LINE_ANT,
                 ZIG_ZAG_ANT,FLY_ROUTE,KING_ANT)
                 antType = math.random(3)
@@ -127,6 +129,8 @@ GameEngine = {
                     DELAY_TIME = DELAY_TIME - 200
                 elseif(antPattern == ZIG_ZAG_ANT ) then
                     DELAY_TIME = DELAY_TIME - 300
+                elseif(antPattern == LINE_ANT ) then
+                    DELAY_TIME = DELAY_TIME - 300
                 elseif(antPattern == CROSSING_ANT  or antPattern == FAST_ANT) then
                     DELAY_TIME = DELAY_TIME - 200
                 elseif(antPattern == KING_ANT ) then
@@ -134,19 +138,19 @@ GameEngine = {
                     DELAY_TIME = DELAY_TIME + 2000
                 end
                 
-            elseif score  < 4000 then
+            else
                 
                 antPattern = getRandomAntPattern(S_SHAPE_ANT,BOSS_ANT,FREE_ROAM_ANT,FLY_ROUTE,LINE_ANT,
                 CROSSING_ANT,FAST_ANT,KING_ANT)
                 antType = math.random(3)
                 DELAY_TIME = math.random(900,1200)
                 posX = 0
-                if(antPattern == LINE_ANT) then
+                if(antPattern == FREE_ROAM_ANT) then
                     posX = math.random(bufferWidth + 50,660 - bufferWidth)
                     DELAY_TIME = 90
                 elseif(antPattern == S_SHAPE_ANT ) then
                     DELAY_TIME = DELAY_TIME
-                elseif(antPattern == FREE_ROAM_ANT) then
+                elseif(antPattern == LINE_ANT) then
                     posX = math.random(bufferWidth + 50,680 - bufferWidth)
                     DELAY_TIME = DELAY_TIME- 300
                 elseif(antPattern == CROSSING_ANT or antPattern==FAST_ANT ) then

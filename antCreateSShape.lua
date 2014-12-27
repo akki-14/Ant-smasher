@@ -4,6 +4,7 @@ CreateAntSShape = {
     new = function(group,setSeq)
         local ant = SpriteAnim.new()
         ant.taps = 0
+        local antWidth = ant.contentWidth
         --ant.rotation = 180
         local END_TIME = 1500
         if 	(score < 500 )then
@@ -24,16 +25,16 @@ CreateAntSShape = {
         ant:setSequence(setSeq)
         ant:play()
         ant.y = 1280
-        ant.x = math.random(bufferWidth+50,680-bufferWidth)
+        ant.x = math.random(bufferWidth+50+antWidth,720-50-bufferWidth-antWidth)
         group:insert(ant)
         ant:addEventListener( "sprite", SpriteAnim.spriteListener )
         
         local function antTrajectory()
             local xVal,yVal
             if(ant.x < TOTAL_WIDTH/2) then
-                xVal = math.random(TOTAL_WIDTH/2-ant.x + 30,TOTAL_WIDTH - ant.x - bufferWidth)
+                xVal = math.random(TOTAL_WIDTH/2-ant.x + 40,TOTAL_WIDTH - ant.x - bufferWidth)
             else
-                xVal = - math.random(ant.x - TOTAL_WIDTH/2 + 30,ant.x+bufferWidth)
+                xVal = - math.random(ant.x - TOTAL_WIDTH/2 + 40,ant.x+bufferWidth)
             end
             ant.rotation = 0
             yVal = math.random(300,500)
