@@ -8,6 +8,7 @@ require("saveScore")
 require("shareApp")
 require("bounce")
 require("beat")
+require("rateThisApp").rateThis("market://details?id=com.gaakapps.antsmasher")
 ads = require("ads")
 
 local musicSound

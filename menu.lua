@@ -45,10 +45,11 @@ function onKeyEvent(event)
     local phase = event.phase
     
     if event.phase=="down" and event.keyName=="back" then
-        promoGroup.isVisible = true
+        --promoGroup.isVisible = true
         if shouldExit then
             native.requestExit()
         end
+        native.requestExit() 
         shouldExit = true
         return true
     end
@@ -263,8 +264,8 @@ function scene:enterScene(event)
                         SoundControl.Menu()
                         --storyboard.gotoScene( "restartView", "fade", 1000 )
                         
-                        promoGroup.isVisible = true
-                        
+                        --promoGroup.isVisible = true
+                        native.requestExit()
                         
                     end
                 end
@@ -280,12 +281,12 @@ function scene:enterScene(event)
     
     local function goBalloon(event)
         if event.phase == "began" then
-            system.openURL("market://details?id=com.gaakapps.balloonburst" )
+            system.openURL("market://details?id=com.gaakapps.balloonpop" )
         end
     end
     local function goDress(event)
         if event.phase == "began" then
-            system.openURL("market://details?id=com.gaakapps.dressup" )
+            system.openURL("market://details?id=com.gaakapps.dressupfree" )
         end	
     end
     local function go2048(event)
