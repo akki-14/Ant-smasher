@@ -30,6 +30,15 @@ Smash = {
 					group:insert( smashedAnt )
 					transition.to(smashedAnt,{alpha = 0,time=math.random(1500,2700), transition=easing.inOutQuad, onComplete = function() smashedAnt:removeSelf(); smashedAnt = nil end })
 				end
+				function frogSmash()
+					local smashedFrog = SpriteAnim.frog()
+					smashedFrog.x = target.x
+					smashedFrog.y = target.y
+					smashedFrog.rotation = target.rotation
+					smashedFrog:setSequence(getSeq .. "Smash")
+					group:insert( smashedFrog )
+					transition.to(smashedFrog,{alpha = 0,time=math.random(1500,2700), transition=easing.inOutQuad, onComplete = function() smashedFrog:removeSelf(); smashedFrog = nil end })
+				end
 				
 				function initOver()
 				
@@ -82,11 +91,16 @@ Smash = {
 					target:removeSelf()
 					target = nil
 					orbitFlag = false
+				elseif getSeq == "frog" then
+					frogSmash()
+					transition.cancel(target)
+					target:removeSelf()
+					target = nil
 				elseif getSeq == "fly" then
 					initSmash2()
 					transition.cancel(target)
 					target:removeSelf()
-					target = nil
+					target = nil	
 				else	
 					initSmash()
 					transition.cancel(target)

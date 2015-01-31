@@ -175,7 +175,8 @@ end
 
 
 function scene:enterScene(event)
-    ads.show( "banner", { x=0, y=1160,interval=50,appId="ca-app-pub-2883837174861368/5479620739"} )
+    -- ads.show( "banner", { x=0, y=1160,interval=50,appId="ca-app-pub-2883837174861368/5479620739"} )
+    myAds.show()
     Runtime:addEventListener( "enterFrame", scoreFront)
     Runtime:addEventListener( "key", onKeyEvent )
     pauseButton:addEventListener("tap",pauseGame)
@@ -184,7 +185,7 @@ end
 
 
 function scene:exitScene(event)
-    ads.hide()
+    myAds.hide()
     Runtime:removeEventListener( "enterFrame", scoreFront)
     Runtime:removeEventListener( "key", onKeyEvent )
     transition.cancel()

@@ -9,7 +9,10 @@ require("shareApp")
 require("bounce")
 require("beat")
 require("rateThisApp").rateThis("market://details?id=com.gaakapps.antsmasher")
-ads = require("ads")
+settings = require("gameSettings")
+local loadsave = require("loadsave")
+local json = require("json")
+myAds = require("myAds")
 
 local musicSound
 local gameSound
@@ -19,7 +22,22 @@ orbitFlag = true
 timerId = nil
 gamePause = false
 
-ads.init( "admob", "ca-app-pub-2883837174861368/5479620739" )  --ant smasher
+serverSettings = loadsave.loadTable("settings.json")
+if serverSettings ~=nil then
+	print("ffffffff",serverSettings.game_speed )
+	if serverSettings.ad_type == "vungle" then
+		myAds.initVungle()
+	-- elseif serverSettings.adtype == "chartboost" then
+	-- 	myAds.initChartboost()
+	elseif serverSettings.ad_type == "inneractive" then
+		myAds.initInneractive()
+	else	
+		myAds.initAdmob()
+	end
+else
+	myAds.initVungle()
+end
+
 TOTAL_WIDTH = display.viewableContentWidth
 TOTAL_HEIGHT = display.viewableContentHeight
 bufferWidth = (display.contentWidth - display.viewableContentWidth ) / 2
@@ -84,6 +102,26 @@ lifeGain = audio.loadSound( "sounds/life_gain.ogg" )
 
 bgChannel = audio.play( mainMenuBgSound, { channel=1, loops=-1, fadein=3000 } )
 storyboard.gotoScene( "menu", "fade", 1000 )
+
+local function networkListener( event )
+	if ( event.isError ) then
+		print( "Network error!")
+	else
+		print ( "RESPONSE: " .. event.response )
+		local t = json.decode( event.response )
+
+		-- Go through the array in a loop
+		if t.save_settings == true then
+			print("settings saved")
+			loadsave.saveTable( t, "settings.json" )
+		end
+
+	end
+end
+
+
+
+network.request( "http://gaak.atwebpages.com/antsmasher.php", "GET", networkListener )
 
 
 print("buffer width",bufferWidth,bufferWidthRatio)

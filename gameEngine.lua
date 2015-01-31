@@ -10,6 +10,7 @@ require("flyCreate")
 require("antCreateSShape")
 require("antCreateBoss")
 require("antCreateKing")
+require("frog")
 require("gainLife")
 
 local gameEngineTimer = nil
@@ -219,6 +220,7 @@ GameEngine = {
         
         function aaa(event)
             CreateAnt.new(group,seq[1])
+            Frog.new(tempGroup,"frog")
             --CreateAntBoss.new(group,seq[4])
             --CreateAntRoam.new(group,seq[4],200)
             --CreateKingAnt.new(group,seq[1])

@@ -114,6 +114,34 @@ SpriteAnim = {
 	
 	return spriteSet
   end,
+
+  frog = function()
+  
+	  local sequenceData =
+	{
+		 {
+			 name="frog", 
+			 start=1,
+			 count=7,
+			 time=500, 
+			 loopCount=1
+		 },
+		 
+		 {
+			 name="frogSmash", 
+			 frames={5}
+		 }
+	}
+	
+	
+	local sheetData = { width=100, height=180, numFrames=7, sheetContentWidth=700, sheetContentHeight=180 }
+  
+	local spriteSheet = graphics.newImageSheet( "sprites/frog_sprite.png", sheetData )
+  	local spriteSet = display.newSprite( spriteSheet, sequenceData )
+	spriteSet.y = -40
+	
+	return spriteSet
+  end,
   
   spriteListener = function(event)
  

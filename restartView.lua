@@ -154,11 +154,12 @@ function scene:createScene(event)
 end
 
 function scene:enterScene(event)
-	if math.random(3) == 2 then
-		ads.show( "banner", { x=0, y=1125,interval=40,appId="ca-app-pub-2883837174861368/5479620739"} )
-	else
-		ads.show( "interstitial", { x=0, y=1050,appId="ca-app-pub-2883837174861368/9196308735"} )
-	end	
+	-- if math.random(3) == 2 then
+	-- 	ads.show( "banner", { x=0, y=1125,interval=40,appId="ca-app-pub-2883837174861368/5479620739"} )
+	-- else
+	-- 	ads.show( "interstitial", { x=0, y=1050,appId="ca-app-pub-2883837174861368/9196308735"} )
+	-- end	
+	myAds.show()
 	restart:addEventListener("tap",restartGame)
 	home:addEventListener("tap",menuReturn)
 	Runtime:addEventListener( "key", onKeyEvent )
@@ -166,7 +167,7 @@ end
 
 
 function scene:exitScene(event)
-	ads.hide()
+	myAds.hide()
 	Runtime:removeEventListener( "key", onKeyEvent )
 	if tempFlag then
 		scoreIce:storeIfHigher( "No-Name", score )
