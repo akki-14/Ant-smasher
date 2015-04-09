@@ -66,7 +66,7 @@ local function showAds(target)
     local iconAdOne = display.newImage(adGroup,"ads/".. image[2] ..".png",display.contentCenterX-200, (3*display.contentCenterY)/2)
     iconAdOne.url = image[2]
     local iconAdTwo = display.newImage(adGroup,"ads/".. image[3] ..".png",display.contentCenterX+200, (3*display.contentCenterY)/2)
-    iconAdTwo.url = image[2]
+    iconAdTwo.url = image[3]
     bannerAd:addEventListener("tap", adClick)
     iconAdOne:addEventListener("tap", adClick)
     iconAdTwo:addEventListener("tap", adClick)
