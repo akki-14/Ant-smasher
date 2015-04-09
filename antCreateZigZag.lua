@@ -5,23 +5,26 @@ CreateAntZigZag = {
         
         local ant = SpriteAnim.new()
         ant.taps = 0
-        local END_TIME = 1400
+        local endTime = 1400
         
         if (score < 500 )then
-            END_TIME = END_TIME
+            endTime = endTime
         elseif 	(score < 1000 )then
-            END_TIME = END_TIME - 200
+            endTime = endTime - 200
         elseif 	(score < 1500 )then
-            END_TIME = END_TIME - 300
+            endTime = endTime - 300
         elseif (score < 2000 )then
-            END_TIME = END_TIME - 400
+            endTime = endTime - 400
         elseif (score < 3000 )then
-            END_TIME = END_TIME - 500
+            endTime = endTime - 500
         elseif (score < 4000 )then
-            END_TIME = END_TIME - 600
+            endTime = endTime - 600
         else
-            END_TIME = END_TIME - 700
+            endTime = endTime - 700
         end
+        
+        endTime = endTime * settings.gameSpeed
+        
         ant:setSequence(setSeq)
         ant:play()
         ant.x = math.random(bufferWidth + 200 , display.viewableContentWidth - 200)
@@ -33,16 +36,16 @@ CreateAntZigZag = {
         ant:addEventListener( "sprite", SpriteAnim.spriteListener )
         if ant.x < display.contentCenterX then
             ant.rotation = ant.rotation + 45
-                transition.to( ant, { x = ant.x + 150, y = ant.y - 320, time=END_TIME,onComplete= function()  
+                transition.to( ant, { x = ant.x + 150, y = ant.y - 320, time=endTime,onComplete= function()  
                     
                     ant.rotation = ant.rotation - 90
-                        transition.to( ant, { x = ant.x - 300, y = ant.y - 320, time=END_TIME,onComplete= function() 
+                        transition.to( ant, { x = ant.x - 300, y = ant.y - 320, time=endTime,onComplete= function() 
                             
                             ant.rotation = ant.rotation + 90
-                                transition.to( ant, { x = ant.x + 300, y = ant.y - 320 , time=END_TIME,onComplete= function() 
+                                transition.to( ant, { x = ant.x + 300, y = ant.y - 320 , time=endTime,onComplete= function() 
                                     
                                     ant.rotation = ant.rotation - 90
-                                        transition.to( ant, { x = ant.x - 300, y = ant.y - 320 , time=END_TIME,onComplete= function()
+                                        transition.to( ant, { x = ant.x - 300, y = ant.y - 320 , time=endTime,onComplete= function()
                                             
                                             SpriteAnim.endLife(ant) ; ant:removeSelf(); ant = nil
                                             
@@ -55,16 +58,16 @@ CreateAntZigZag = {
             end})
         else
             ant.rotation = ant.rotation - 45
-                transition.to( ant, { x = ant.x - 150, y = ant.y - 320 , time=END_TIME,onComplete= function()  
+                transition.to( ant, { x = ant.x - 150, y = ant.y - 320 , time=endTime,onComplete= function()  
                     
                     ant.rotation = ant.rotation + 90
-                        transition.to( ant, { x = ant.x + 300, y = ant.y - 320, time=END_TIME,onComplete= function() 
+                        transition.to( ant, { x = ant.x + 300, y = ant.y - 320, time=endTime,onComplete= function() 
                             
                             ant.rotation = ant.rotation - 90
-                                transition.to( ant, { x = ant.x - 300, y = ant.y - 320 , time=END_TIME,onComplete= function() 
+                                transition.to( ant, { x = ant.x - 300, y = ant.y - 320 , time=endTime,onComplete= function() 
                                     
                                     ant.rotation = ant.rotation + 90
-                                        transition.to( ant, { x = ant.x + 300, y = ant.y - 320 , time=END_TIME,onComplete= function()
+                                        transition.to( ant, { x = ant.x + 300, y = ant.y - 320 , time=endTime,onComplete= function()
                                             
                                             SpriteAnim.endLife(ant) ; ant:removeSelf(); ant = nil
                                             

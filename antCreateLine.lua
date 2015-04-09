@@ -17,6 +17,8 @@ CreateAntLine = {
             endTime = math.random(2800,3500)
         end	
         
+        endTime = endTime * settings.gameSpeed
+        
         local ant = SpriteAnim.new()
         ant.taps = 0
         --ant.rotation = 180

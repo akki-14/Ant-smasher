@@ -35,6 +35,9 @@ CreateAntTwin = {
         else
             endTime = 3300
         end
+        
+        endTime = endTime * settings.gameSpeed
+        
         ant:setSequence(setSeq)
         ant:play()
         ant.x = display.contentCenterX - 100

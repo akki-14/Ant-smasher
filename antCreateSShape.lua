@@ -6,22 +6,25 @@ CreateAntSShape = {
         ant.taps = 0
         local antWidth = ant.contentWidth
         --ant.rotation = 180
-        local END_TIME = 1500
+        local endTime = 1500
         if 	(score < 500 )then
-            END_TIME = END_TIME 
+            endTime = endTime 
         elseif 	(score < 1000 )then
-            END_TIME = END_TIME - 200
+            endTime = endTime - 200
         elseif 	(score < 1500 )then
-            END_TIME = END_TIME - 300
+            endTime = endTime - 300
         elseif 	(score < 2000 )then
-            END_TIME = END_TIME - 400
+            endTime = endTime - 400
         elseif 	(score < 3000 )then
-            END_TIME = END_TIME - 500
+            endTime = endTime - 500
         elseif 	(score < 4000 )then
-            END_TIME = END_TIME - 600
+            endTime = endTime - 600
         else
-            END_TIME = END_TIME - 700
+            endTime = endTime - 700
         end
+        
+        endTime = endTime * settings.gameSpeed
+        
         ant:setSequence(setSeq)
         ant:play()
         ant.y = 1280
@@ -38,7 +41,7 @@ CreateAntSShape = {
             end
             ant.rotation = 0
             yVal = math.random(300,500)
-                transition.to( ant, {  y = ant.y - yVal, time=END_TIME,onComplete= function() 
+                transition.to( ant, {  y = ant.y - yVal, time=endTime,onComplete= function() 
                     
                     if(ant.y < 0) then
                         SpriteAnim.endLife(ant) ; 
@@ -50,7 +53,7 @@ CreateAntSShape = {
                         else
                             ant.rotation = -90
                         end
-                            transition.to( ant, { x = ant.x + xVal, time=END_TIME/2,onComplete= function() 
+                            transition.to( ant, { x = ant.x + xVal, time=endTime/2,onComplete= function() 
                                 if(ant.y < 0) then
                                     SpriteAnim.endLife(ant); 
                                     ant:removeSelf(); 

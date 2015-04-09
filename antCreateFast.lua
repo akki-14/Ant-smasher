@@ -1,5 +1,6 @@
 require("spriteAnim")
 require("smash")
+
 CreateAntFast = {
     new = function(group,setSeq)
         
@@ -15,6 +16,8 @@ CreateAntFast = {
             endTime = math.random(1500,1600)
             diffTime = math.random(200,300)
         end	
+        
+        endTime = endTime * settings.gameSpeed
         
         local ant = SpriteAnim.new()
         ant.taps = 0

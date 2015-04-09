@@ -23,6 +23,9 @@ CreateAntCross = {
         else
             endTime = 850
         end
+
+        endTime = endTime * settings.gameSpeed
+        
         local ant = SpriteAnim.new()
         ant.taps = 0
         ant:setSequence(setSeq)
