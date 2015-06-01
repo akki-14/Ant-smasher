@@ -13,7 +13,6 @@ require("antCreateKing")
 require("frog")
 require("gainLife")
 local powers = require("powers")
-local roamingBomb = require("roamingBomb")
 local gameEngineTimer = nil
 local tempGroup
 local antGroup 
@@ -22,7 +21,7 @@ local onEnterFrame
 local powerThunder
 
 GameEngine = {
-    new = function(group)
+    new = function(group,roamingBomb)
         tempGroup = group
         antGroup = display.newGroup()
         powerGroup = display.newGroup()
@@ -249,7 +248,15 @@ GameEngine = {
         
         gameEngineTimer = timer.performWithDelay(math.random(1500,2500),aaa,2)
 
-        roamingBomb.start(antGroup, nil)
+        local availableHeight = TOTAL_HEIGHT - 400
+        local partHeight = availableHeight / 8
+        for i=1,4 do
+            roamingBomb.new(TOTAL_WIDTH, 100 + partHeight * (2 * i - 1), antGroup,group,"left")
+        end
+        for i=1,4 do
+            roamingBomb.new(0, 100 +  partHeight * (2 * i ), antGroup,group,"right")
+        end
+        
 --        powerThunder = powers:initThunder()
 --        powerGroup:insert(powerThunder)
     end,

@@ -1,4 +1,5 @@
 require("gameEngine")
+local roamingBomb = require("roamingBomb")
 local scene = storyboard.newScene()
 storyboard.purgeOnSceneChange = true
 
@@ -117,7 +118,7 @@ function scene:createScene(event)
     --CreateAnt.new(group)
     --timer.performWithDelay(2500,aaa,10)
     --CreateAntOrbit.new(group)
-    GameEngine.new(group)
+    GameEngine.new(group,roamingBomb)
     
     print("game mmm",gameOver)
     
@@ -186,6 +187,7 @@ end
 
 function scene:exitScene(event)
     myAds.hide()
+    roamingBomb.destroyAll()
     Runtime:removeEventListener( "enterFrame", scoreFront)
     Runtime:removeEventListener( "key", onKeyEvent )
     transition.cancel()

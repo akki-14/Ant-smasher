@@ -141,6 +141,72 @@ SpriteAnim = {
 	spriteSet.y = -40
 	return spriteSet
   end,
+  roamingBomb = function()
+  
+	  local sequenceData =
+	{
+
+		 {
+			 name="still", 
+			 frames={1}
+		 },
+                 {
+			 name="walk", 
+			 start=2,
+			 count=9,
+			 time=800, 
+			 loopCount=0
+		 },
+                 {
+			 name="walk_inv", 
+			 start=13,
+			 count=9,
+			 time=800, 
+			 loopCount=0
+		 },
+		 {
+			 name="explode", 
+			 frames={22}
+		 }
+	}
+	
+	
+	local sheetData = { width=102, height=142, numFrames=22, sheetContentWidth=1122, sheetContentHeight=284 }
+  
+	local spriteSheet = graphics.newImageSheet( "sprites/roaming_bomb.png", sheetData )
+  	local spriteSet = display.newSprite( spriteSheet, sequenceData )
+	return spriteSet
+  end,
+  
+  roamingBombInv = function()
+  
+	  local sequenceData =
+	{
+		 {
+			 name="still", 
+			 frames={1}
+		 },
+                 {
+			 name="walk", 
+			 start=2,
+			 count=9,
+			 time=800, 
+			 loopCount=0
+		 },
+		 
+		 {
+			 name="explode", 
+			 frames={11}
+		 }
+	}
+	
+	
+	local sheetData = { width=102, height=142, numFrames=11, sheetContentWidth=1122, sheetContentHeight=142 }
+  
+	local spriteSheet = graphics.newImageSheet( "sprites/roaming_bomb_inv.png", sheetData )
+  	local spriteSet = display.newSprite( spriteSheet, sequenceData )
+	return spriteSet
+  end,
   
   spriteListener = function(event)
  
