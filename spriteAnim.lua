@@ -208,6 +208,26 @@ SpriteAnim = {
 	return spriteSet
   end,
   
+  explode = function()
+  
+	  local sequenceData =
+	{
+		 {
+                         start = 1,
+                         count = 11,
+			 time=1200,
+			 loopCount=1
+		 }
+	}
+	
+	
+	local sheetData = { width=253, height=128, numFrames=12, sheetContentWidth=768, sheetContentHeight=512 }
+  
+	local spriteSheet = graphics.newImageSheet( "sprites/explosion.png", sheetData )
+  	local spriteSet = display.newSprite( spriteSheet, sequenceData )
+	return spriteSet
+  
+  end,
   spriteListener = function(event)
  
 		if gameOver == true then

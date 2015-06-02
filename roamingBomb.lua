@@ -1,6 +1,11 @@
+require("smash")
 local M = {}
 M.__index = M
 M.bombGroup = {}
+
+local function showKilledObj(killedObj)
+    
+end
 
 function M.new(initX,initY,grp,sceneGrp,direction)
     local self = setmetatable({}, M)
@@ -33,8 +38,10 @@ function M.new(initX,initY,grp,sceneGrp,direction)
             for k,v in pairs(antStack) do
 --                print("remove",v)
                 transition.cancel(v)
+                showKilledObj()
+                Smash.new{target = v}
                 v:removeSelf()
-                v = nil     
+                v = nil
                 if isAutoExplosion then
                     print("explode",bomb)
                     self.explode()
@@ -44,7 +51,7 @@ function M.new(initX,initY,grp,sceneGrp,direction)
     end
     
     local function enterFrame(event)
-        checkForObjectsInExplosion(self.audienceGrp, bomb , {radius = 100,autoExplosion = true}) 
+        checkForObjectsInExplosion(self.audienceGrp, bomb , {radius = 60,autoExplosion = true}) 
     end
     
     
@@ -84,27 +91,31 @@ function M.new(initX,initY,grp,sceneGrp,direction)
     end
     
     function startExplosion(x,y)
-        local explode = SpriteAnim.roamingBomb()
+        local explode = SpriteAnim.explode()
         explode.x = x
         explode.y = y 
-        explode:setSequence("explode")
+        explode
+        :scale(2.3,2.3)
         explode:play()
         sceneGrp:insert(explode)
         explode:addEventListener("sprite", function(event) 
             local target = event.target
             if event.phase == "ended" then
+                transition.to(target, {time = 700 ,alpha = 0.1 , onComplete = function() 
                 target:removeSelf()
                 target = nil
+                end
+                    })
             end
         end )
-        checkForObjectsInExplosion(self.audienceGrp, explode,{radius = 500,autoExplosion = false})
+        checkForObjectsInExplosion(self.audienceGrp, explode,{radius = 300,autoExplosion = false})
     end
     
     
     self.explode = function()
         if bomb ~= nil then
             Runtime:removeEventListener( "enterFrame", enterFrame)
-            startExplosion(bomb.x,bomb.y)
+            startExplosion(bomb.x,bomb.y)            
             transition.cancel(bomb)
             bomb:removeSelf()
             bomb = nil
