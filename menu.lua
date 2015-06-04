@@ -182,7 +182,7 @@ function shouldShowPromotion()
         return true
     else
         local timeDiff = os.difftime(os.time() - time)
-        if timeDiff > defaultReshow then
+        if timeDiff > defaultReshow or timeDiff < 0 then
             optionIce:store( "promtionShowTime", os.time() )
             optionIce:save()
             return true

@@ -1,7 +1,7 @@
 require("spriteAnim")
 require("smash")
 CreateAntTwin = {
-    new = function(group,setSeq)
+    new = function(group,beeGrp,setSeq)
         
         
         local ant = SpriteAnim.new()
@@ -80,7 +80,7 @@ CreateAntTwin = {
                 bee.x =  display.contentCenterX 
                 tempX =  display.contentCenterX 
             end
-            group:insert( bee )
+            beeGrp:insert( bee )
             bee:addEventListener("touch",Smash.new)
             bee:addEventListener( "sprite", SpriteAnim.spriteListener )
             toFro = function()

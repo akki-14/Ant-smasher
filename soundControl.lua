@@ -14,7 +14,7 @@ SoundControl = {
 			elseif getSeq == "lifeGain" then
 				smashChannel = audio.play( lifeGain )
 			else
-				smashChannel = audio.play( antSound[math.random(6,8)] )
+				smashChannel = audio.play( antSound[math.random(7,8)] )
 			end
 		end
 	
@@ -29,5 +29,8 @@ SoundControl = {
 	Tick = function()
 		tickSoundChannel = audio.play( tickSound, { channel = 2 } )
 	
+	end,
+	explosion = function()
+            explosionChannel = audio.play( explosionSound )
 	end
 }

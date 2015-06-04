@@ -95,7 +95,7 @@ function M.new(initX,initY,grp,sceneGrp,direction)
         explode.x = x
         explode.y = y 
         explode
-        :scale(2.3,2.3)
+        :scale(2.7,2.5)
         explode:play()
         sceneGrp:insert(explode)
         explode:addEventListener("sprite", function(event) 
@@ -108,7 +108,8 @@ function M.new(initX,initY,grp,sceneGrp,direction)
                     })
             end
         end )
-        checkForObjectsInExplosion(self.audienceGrp, explode,{radius = 300,autoExplosion = false})
+        SoundControl.explosion()
+        checkForObjectsInExplosion(self.audienceGrp, explode,{radius = 250,autoExplosion = false})
     end
     
     

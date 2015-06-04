@@ -16,16 +16,20 @@ local powers = require("powers")
 local gameEngineTimer = nil
 local tempGroup
 local antGroup 
+local beeGroup
 local powerGroup
 local onEnterFrame
 local powerThunder
+local giveLife
 
 GameEngine = {
     new = function(group,roamingBomb)
         tempGroup = group
         antGroup = display.newGroup()
         powerGroup = display.newGroup()
+        beeGroup = display.newGroup()
         group:insert(antGroup)
+        group:insert(beeGroup)
         group:insert(powerGroup)
         local calculate
         local seq = {"ant1","ant2","scorpio","antBoss"}
@@ -44,6 +48,7 @@ GameEngine = {
         local S_SHAPE_ANT = 10
         local BOSS_ANT = 11
         local KING_ANT = 12
+        local FROG = 13
         
         local displayAnts
         
@@ -57,7 +62,6 @@ GameEngine = {
         end
         
         function calculate(points,totalKilled)
-            
             
             local numOfAnts = math.random(5,8)
             local antPattern
@@ -101,10 +105,10 @@ GameEngine = {
                     end
                 end
                 
-            elseif score  < 1500 then
+            elseif score  < 1800 then
                 
                 antPattern = getRandomAntPattern(BOSS_ANT,TWIN_ANT,FAST_ANT,CROSSING_ANT
-                ,LINE_ANT,S_SHAPE_ANT,FLY_ROUTE,FREE_ROAM_ANT)
+                ,LINE_ANT,S_SHAPE_ANT,FLY_ROUTE,FREE_ROAM_ANT,FROG)
                 antType = math.random(3)
                 DELAY_TIME = math.random(1000,1500)
                 posX = 0
@@ -123,6 +127,9 @@ GameEngine = {
                     DELAY_TIME = math.min(DELAY_TIME-200,1200) 
                 elseif(antPattern == BOSS_ANT ) then
                     numOfAnts = 1
+                elseif(antPattern == FROG ) then
+                    DELAY_TIME = DELAY_TIME + 1000
+                    numOfAnts = math.random(1, 5);
                 end
                 
             elseif score  < 3500 then
@@ -151,7 +158,7 @@ GameEngine = {
             else
                 
                 antPattern = getRandomAntPattern(S_SHAPE_ANT,BOSS_ANT,FREE_ROAM_ANT,FLY_ROUTE,LINE_ANT,
-                CROSSING_ANT,FAST_ANT,KING_ANT)
+                CROSSING_ANT,FAST_ANT,KING_ANT,FROG)
                 antType = math.random(3)
                 DELAY_TIME = math.random(900,1200)
                 posX = 0
@@ -165,13 +172,13 @@ GameEngine = {
                     DELAY_TIME = DELAY_TIME- 300
                 elseif(antPattern == CROSSING_ANT or antPattern==FAST_ANT ) then
                     DELAY_TIME = DELAY_TIME-400
-                elseif(antPattern == KING_ANT ) then
-                    DELAY_TIME = DELAY_TIME + 2000
                 elseif(antPattern == BOSS_ANT ) then
                     numOfAnts = 1
                 elseif(antPattern == KING_ANT ) then
                     numOfAnts = math.min(numOfAnts,4)
                     DELAY_TIME = DELAY_TIME + 1800
+                elseif(antPattern == FROG ) then
+                    DELAY_TIME = DELAY_TIME + 1000
                 end
                 
             end
@@ -180,7 +187,9 @@ GameEngine = {
         end
         
         function displayAnts(event)
-            if gameOver == false then	
+            if gameOver == false then
+                giveLife() --give life bee on condition pass
+                
                 local ant = event.source.params
                 local antPattern = ant.pattern
                 local posX = ant.positionX
@@ -189,9 +198,9 @@ GameEngine = {
                 if antPattern == NORMAL_ANT then
                     CreateAnt.new(antGroup,seq[math.random(2)])
                 elseif antPattern == TWIN_ANT then
-                    CreateAntTwin.new(antGroup,seq[math.random(2)])
+                    CreateAntTwin.new(antGroup,beeGroup,seq[math.random(2)])
                 elseif antPattern == LINE_ANT then
-                    CreateAntLine.new(antGroup,seq[math.random(2)],posX)
+                    CreateAntLine.new(antGroup,beeGroup,seq[math.random(2)],posX)
                 elseif antPattern == FREE_ROAM_ANT then
                     CreateAntRoam.new(antGroup,seq[1],posX)
                 elseif antPattern == ZIG_ZAG_ANT then
@@ -199,7 +208,7 @@ GameEngine = {
                 elseif antPattern == CROSSING_ANT then
                     CreateAntCross.new(antGroup,seq[math.random(3)])
                 elseif antPattern == ANT_WITH_ORBIT then
-                    CreateAntOrbit.new(antGroup,"bee")
+                    CreateAntOrbit.new(group,beeGroup,"bee")
                 elseif antPattern == FAST_ANT then
                     CreateAntFast.new(antGroup,seq[math.random(3)])
                 elseif antPattern == FLY_ROUTE then
@@ -207,10 +216,12 @@ GameEngine = {
                 elseif antPattern == S_SHAPE_ANT then
                     CreateAntSShape.new(antGroup,seq[math.random(2)])
                 elseif antPattern == BOSS_ANT then
-                    CreateAntBoss.new(group,seq[4])
+                    CreateAntBoss.new(antGroup,seq[4])
                     delay = 5000
                 elseif antPattern == KING_ANT then
-                    CreateKingAnt.new(antGroup,seq[math.random(2)])
+                    CreateKingAnt.new(antGroup,beeGroup,seq[math.random(2)])
+                elseif antPattern == FROG then
+                    Frog.new(antGroup,"frog")
                 end
                 
                 
@@ -229,7 +240,8 @@ GameEngine = {
         
         function aaa(event)
             CreateAnt.new(antGroup,seq[1])
-            Frog.new(tempGroup,"frog")
+                    Frog.new(antGroup,"frog")
+                    CreateAntOrbit.new(group,beeGroup,"bee")
             --CreateAntBoss.new(group,seq[4])
             --CreateAntRoam.new(group,seq[4],200)
             --CreateKingAnt.new(group,seq[1])
@@ -249,12 +261,12 @@ GameEngine = {
         gameEngineTimer = timer.performWithDelay(math.random(1500,2500),aaa,2)
 
         local availableHeight = TOTAL_HEIGHT - 400
-        local partHeight = availableHeight / 8
-        for i=1,4 do
-            roamingBomb.new(TOTAL_WIDTH, 100 + partHeight * (2 * i - 1), antGroup,group,"left")
+        local partHeight = availableHeight / 6
+        for i=1,3 do
+            roamingBomb.new(TOTAL_WIDTH - 15, 100 + partHeight * (2 * i - 1), antGroup,group,"left")
         end
-        for i=1,4 do
-            roamingBomb.new(0, 100 +  partHeight * (2 * i ), antGroup,group,"right")
+        for i=1,3 do
+            roamingBomb.new(20, 100 +  partHeight * (2 * i ), antGroup,group,"right")
         end
         
 --        powerThunder = powers:initThunder()
@@ -275,4 +287,20 @@ GameEngine = {
         --SpriteAnim.resume()
         
     end
-}	
+}
+
+function giveLife()
+    if score % 300 == 250 or score % 200 == 0 then
+        if isPower then
+            if math.random(2) == 1 then
+                GainLife.gain(group)
+            else	
+                orbitFlag = true
+                CreateAntOrbit.new(group,beeGroup,"bee")
+            end	
+            isPower = false
+        end	
+    else
+        isPower = true
+    end
+end

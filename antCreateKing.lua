@@ -1,7 +1,7 @@
 require("spriteAnim")
 require("smash")
 CreateKingAnt = {
-    new = function(group,setSeq)
+    new = function(antGrp,beeGrp,setSeq)
         local ant = SpriteAnim.new()
         local bee = {}
         local bee1 = {}
@@ -32,7 +32,7 @@ CreateKingAnt = {
         ant:play()
         ant.y = startY
         ant.x = math.random(bufferWidth+150,570-bufferWidth)
-        group:insert(ant)
+        antGrp:insert(ant)
         ant:addEventListener( "sprite", SpriteAnim.spriteListener )
         for i=-1,1 do
             if i ~= 0 then
@@ -41,7 +41,7 @@ CreateKingAnt = {
                 bee[i]:play()
                 bee[i].x = ant.x + (ant.contentWidth + 50) * i
                 bee[i].y = ant.y
-                group:insert(bee[i])
+                beeGrp:insert(bee[i])
                 bee[i]:addEventListener( "sprite", SpriteAnim.spriteListener )
                 bee[i]:addEventListener("touch",Smash.new)
                     transition.to(bee[i],{time = endTime , y = 0 , onComplete = function()
@@ -60,7 +60,7 @@ CreateKingAnt = {
                 bee1[i]:play()
                 bee1[i].x = ant.x
                 bee1[i].y = tempHeight
-                group:insert(bee1[i])
+                beeGrp:insert(bee1[i])
                 bee1[i]:addEventListener( "sprite", SpriteAnim.spriteListener )
                 bee1[i]:addEventListener("touch",Smash.new)
                     transition.to(bee1[i],{time = deltaTime   , y = 0 , onComplete = function()

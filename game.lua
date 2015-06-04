@@ -140,21 +140,6 @@ function scene:createScene(event)
             storyboard.gotoScene( "restartView", "fade", 600 )
         end	
         
-        if score % 50 == 40 then
-        end
-        if score % 300 == 250  then
-            if isPower then
-                if math.random(2) == 1 then
-                    GainLife.gain(group)
-                else	
-                    orbitFlag = true
-                    CreateAntOrbit.new(group,"bee")
-                end	
-                isPower = false
-            end	
-        else
-            isPower = true
-        end
 	
     end
     

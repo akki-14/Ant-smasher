@@ -17,7 +17,7 @@ myAds = require("myAds")
 local musicSound
 local gameSound
 local promotionVersion
-local promotionRefreshTime
+local promotionLastRefreshTime
 local promotionRefreshInterval
 
 
@@ -70,6 +70,7 @@ beeSmashSound = audio.loadSound( "sounds/ouch.ogg" )
 beeSound = audio.loadSound( "sounds/bee.ogg" ) 
 lifeLost = audio.loadSound( "sounds/life_lost.wav" ) 
 lifeGain = audio.loadSound( "sounds/life_gain.ogg" )
+explosionSound = audio.loadSound( "sounds/bomb_explosion.mp3" )
 
 --audio.setVolume( 0.15, { channel=2 } )
 
@@ -105,7 +106,7 @@ lifeGain = audio.loadSound( "sounds/life_gain.ogg" )
 	musicSound = optionIce:retrieve("musicSound")
 	gameSound = optionIce:retrieve("gameSound")
 	promotionVersion = optionIce:retrieve("promotionVersion")
-	promotionRefreshTime = optionIce:retrieve("promotionLastRefreshTime")
+	promotionLastRefreshTime = optionIce:retrieve("promotionLastRefreshTime")
 	promotionRefreshInterval = optionIce:retrieve("promotionRefreshInterval")
 	if musicSound == 1 then 
 		audio.setVolume(1,{channel = 1})
@@ -120,7 +121,7 @@ lifeGain = audio.loadSound( "sounds/life_gain.ogg" )
 
 bgChannel = audio.play( mainMenuBgSound, { channel=1, loops=-1, fadein=3000 } )
 
-local function networkListener( event )
+local function gameSettings( event )
 	if ( event.isError ) then
 		print( "Network error!")
 	else
@@ -145,7 +146,7 @@ local function gamePromotion( event )
 		local t = json.decode( event.response )
 		-- Go through the array in a loop
 		if t then
-			if  promotionVersion < t.version or os.time() - promotionRefreshTime > promotionRefreshInterval then
+			if  promotionVersion < t.version or os.time() - promotionLastRefreshTime > promotionRefreshInterval then
 				print("NEW settings")
 				optionIce:store( "promotionVersion", t.version )
 				optionIce:store( "promotionLastRefreshTime", os.time() )
@@ -164,7 +165,7 @@ local function gamePromotion( event )
 					print(k,v)
 				end	
 			else
-				print("OLD settings",promotionRefreshInterval - (os.time() - promotionRefreshTime) .. " seconds left")	
+				print("promotion refresh data",promotionRefreshInterval - (os.time() - promotionLastRefreshTime) .. " seconds left")
 			end	
 			if t.save_promotion then
 				print("save promotion settings")
@@ -177,7 +178,7 @@ end
 
 
 
-network.request( "http://gaak.atwebpages.com/antsmasher.php", "GET", networkListener )
+network.request( "http://gaak.atwebpages.com/antsmasher.php", "GET", gameSettings )
 network.request( "http://gaak.atwebpages.com/gamePromotion.php", "GET", gamePromotion )
 
 storyboard.gotoScene( "menu", "fade", 1000 )

@@ -1,7 +1,7 @@
 require("spriteAnim")
 require("smash")
 CreateAntLine = {
-    new = function(group,setSeq,posX)
+    new = function(group,beeGrp,setSeq,posX)
         
         local endTime = 8000
         local toFro
@@ -37,7 +37,7 @@ CreateAntLine = {
             bee:setSequence("bee")
             bee:play()
             bee.x =  posX - 100
-            group:insert( bee )
+            beeGrp:insert( bee )
             bee:addEventListener("touch",Smash.new)
             bee:addEventListener( "sprite", SpriteAnim.spriteListener )
             toFro = function()

@@ -1,8 +1,8 @@
 require("spriteAnim")
 
 CreateAntOrbit = {
-    new = function(group,setSeq)
-        local ant = SpriteAnim.new2()
+    new = function(group,beeGrp,setSeq)
+        local bee = SpriteAnim.new2()
         local angle = 0
         local initx,inity = 200,300
         local orbit
@@ -18,23 +18,24 @@ CreateAntOrbit = {
             tempTime = math.random(5000,6000)
         end
         
-        ant:setSequence(setSeq)
-        ant:play()
-        ant.x = math.random(60,650)
-        --ant.rotation = 180
-        group:insert( ant )
-        ant:addEventListener("touch",Smash.new)
+        bee:setSequence(setSeq)
+        bee:play()
+        bee.x = math.random(60,650)
+        --bee.rotation = 180
+        beeGrp:insert( bee )
+        bee:addEventListener("touch",Smash.new)
         
-        local ax,ay = ant.x,ant.y - 150
-        ant:addEventListener( "sprite", SpriteAnim.spriteListener )
+        local ax,ay = bee.x,bee.y - 150
+        bee:addEventListener( "sprite", SpriteAnim.spriteListener )
         
-        transition.from(ant,{y = 1280,time=tempTime, onComplete = function() ant:removeSelf(); ant = nil end })
+        transition.from(bee,{y = 1280,time=tempTime, onComplete = function() bee:removeSelf(); bee = nil end })
         
         circle= display.newImage(group,"images/life.png",math.random(300,450) , -300)
+        circle:scale(1.2,1.2)
         circle.sequence = "gainLife"
         circle:addEventListener("touch",Smash.new)
         function orbit(ax,ay,ox,oy)
-            if(ant.x ~= nil and circle ~= nil) then
+            if(bee.x ~= nil and circle ~= nil) then
                 local theta = (angle * math.pi) / 180
                 
                 
@@ -46,7 +47,7 @@ CreateAntOrbit = {
                 circle.x = px 
                 circle.y = py
                 angle = angle + 9
-                if ant ~=nil then
+                if bee ~=nil then
                     circle.tm = timer.performWithDelay(60,update)
                 end
             else
@@ -56,19 +57,16 @@ CreateAntOrbit = {
         end
         
         function update(event)
-            if ant ~= nil and ant.x ~= nil then
-                orbit(ax,ay,ant.x,ant.y)
-                ay = ant.y - 150 
+            if bee ~= nil and bee.x ~= nil then
+                orbit(ax,ay,bee.x,bee.y)
+                ay = bee.y - 150 
                 --inity = inity + 3
-            elseif circle ~= nil and orbitFlag  then
-                print("circle")
-                if gameOver == false then
-                    circle:removeSelf() ; circle = nil
-                end
+            elseif gameOver == false and circle ~= nil and orbitFlag  then
+                circle:removeSelf() ; circle = nil
             end
         end
         
-        timer.performWithDelay(50,update)
+        timer.performWithDelay(20,update)
         
     end
     

@@ -40,7 +40,7 @@ Smash = {
 					transition.to(smashedFrog,{alpha = 0,time=math.random(1500,2700), transition=easing.inOutQuad, onComplete = function() smashedFrog:removeSelf(); smashedFrog = nil end })
 				end
 				
-				function initOver()
+				local function initOver()
 				
 					local temp = function()
 						storyboard.gotoScene( "restartView", "fade", 1000 )
@@ -94,6 +94,7 @@ Smash = {
 				elseif getSeq == "frog" then
 					frogSmash()
 					transition.cancel(target)
+                                        timer.cancel(target.timerId)
 					target:removeSelf()
 					target = nil
 				elseif getSeq == "fly" then
