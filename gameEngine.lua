@@ -108,7 +108,7 @@ GameEngine = {
             elseif score  < 1800 then
                 
                 antPattern = getRandomAntPattern(BOSS_ANT,TWIN_ANT,FAST_ANT,CROSSING_ANT
-                ,LINE_ANT,S_SHAPE_ANT,FLY_ROUTE,FREE_ROAM_ANT,FROG)
+                ,LINE_ANT,S_SHAPE_ANT,FLY_ROUTE,FREE_ROAM_ANT)
                 antType = math.random(3)
                 DELAY_TIME = math.random(1000,1500)
                 posX = 0
@@ -134,7 +134,7 @@ GameEngine = {
                 
             elseif score  < 3500 then
                 antPattern = getRandomAntPattern(CROSSING_ANT,FREE_ROAM_ANT,TWIN_ANT,LINE_ANT,
-                ZIG_ZAG_ANT,FLY_ROUTE,KING_ANT)
+                ZIG_ZAG_ANT,FLY_ROUTE,KING_ANT,FROG)
                 antType = math.random(3)
                 DELAY_TIME = math.random(700,1400)
                 posX = 0
@@ -153,6 +153,9 @@ GameEngine = {
                 elseif(antPattern == KING_ANT ) then
                     numOfAnts = math.min(numOfAnts,4)
                     DELAY_TIME = DELAY_TIME + 2000
+                elseif(antPattern == FROG ) then
+                    DELAY_TIME = DELAY_TIME + 200
+                    numOfAnts = math.random(3, 6)
                 end
                 
             else
@@ -178,7 +181,8 @@ GameEngine = {
                     numOfAnts = math.min(numOfAnts,4)
                     DELAY_TIME = DELAY_TIME + 1800
                 elseif(antPattern == FROG ) then
-                    DELAY_TIME = DELAY_TIME + 1000
+                    DELAY_TIME = DELAY_TIME + 600
+                    numOfAnts = math.random(3, 6);
                 end
                 
             end
@@ -240,8 +244,8 @@ GameEngine = {
         
         function aaa(event)
             CreateAnt.new(antGroup,seq[1])
-                    Frog.new(antGroup,"frog")
---                    CreateAntOrbit.new(group,beeGroup,"bee")
+--          Frog.new(antGroup,"frog")
+--          CreateAntOrbit.new(group,beeGroup,"bee")
             --CreateAntBoss.new(group,seq[4])
             --CreateAntRoam.new(group,seq[4],200)
             --CreateKingAnt.new(group,seq[1])

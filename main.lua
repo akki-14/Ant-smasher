@@ -32,17 +32,17 @@ serverSettings = loadsave.loadTable("settings.json")
 promotionSettings = loadsave.loadTable("gamePromotion.json")
 
 if serverSettings ~=nil then
-	if serverSettings.ad_type == "vungle" then
-		myAds.initVungle()
+    if serverSettings.ad_type == "vungle" then
+        myAds.initVungle()
 	-- elseif serverSettings.adtype == "chartboost" then
 	-- 	myAds.initChartboost()
-	elseif serverSettings.ad_type == "inneractive" then
-		myAds.initInneractive()
-	else	
-		myAds.initAdmob()
-	end
+    elseif serverSettings.ad_type == "inneractive" then
+        myAds.initInneractive()
+    else	
+        myAds.initAdmob()
+    end
 else
-	myAds.initVungle()
+    myAds.initVungle()
 end
 
 
@@ -62,7 +62,7 @@ audio.reserveChannels(2)
 mainMenuBgSound = audio.loadSound( "sounds/menu_bg.ogg" )
 antSound = {}
 for i = 1,8 do
-	antSound[i] = audio.loadSound( "sounds/ant" .. i .. ".ogg" )
+    antSound[i] = audio.loadSound( "sounds/ant" .. i .. ".ogg" )
 end
 optionSound = audio.loadSound( "sounds/option.ogg" )
 tickSound = audio.loadSound( "sounds/tick.mp3" )  -- change sound  in option menu
@@ -74,101 +74,103 @@ explosionSound = audio.loadSound( "sounds/bomb_explosion.mp3" )
 
 --audio.setVolume( 0.15, { channel=2 } )
 
-	
-		optionIce = ice:loadBox( "values" )
-		optionIce:storeIfNew( "background", 1 )
-		optionIce:storeIfNew( "musicSound", 1 )
-		optionIce:storeIfNew( "gameSound", 1 )
-		optionIce:storeIfNew( "promotionLastRefreshTime", os.time() )
-		optionIce:storeIfNew( "promotionVersion", 0 )
-		optionIce:storeIfNew( "promotionRefreshInterval", 100 )
-		
-		
-		-- default scores
-			scoreIce = ice:loadBox( "scores" )
-			scoreIce:storeIfNew( "Player 1", 100 )
-			scoreIce:storeIfNew( "Player 2", 500 )
-			scoreIce:storeIfNew( "Player 3", 1000 )
-			scoreIce:storeIfNew( "Player 4", 2500 )
-			scoreIce:storeIfNew( "Player 5", 5000 )
-			
-			minScore = ice:loadBox( "minScore" )
-			maxScore = ice:loadBox( "maxScore" )
-			scoreIce:save()
-			optionIce:save()
-		
 
-	musicSound = optionIce:retrieve("musicSound")
-	gameSound = optionIce:retrieve("gameSound")
-	promotionVersion = optionIce:retrieve("promotionVersion")
-	promotionLastRefreshTime = optionIce:retrieve("promotionLastRefreshTime")
-	promotionRefreshInterval = optionIce:retrieve("promotionRefreshInterval")
-	if musicSound == 1 then 
-		audio.setVolume(1,{channel = 1})
-	else
-		audio.setVolume(0,{channel = 1})	
-	end
-	if gameSound == 1 then
-		audio.setVolume(1,{channel = 2})	
-	else
-		audio.setVolume(0,{channel = 2})	
-	end		
+optionIce = ice:loadBox( "values" )
+optionIce:storeIfNew( "background", 1 )
+optionIce:storeIfNew( "musicSound", 1 )
+optionIce:storeIfNew( "gameSound", 1 )
+optionIce:storeIfNew( "promotionLastRefreshTime", os.time() )
+optionIce:storeIfNew( "promotionVersion", 0 )
+optionIce:storeIfNew( "promotionRefreshInterval", 100 )
+
+
+-- default scores
+scoreIce = ice:loadBox( "scores" )
+scoreIce:storeIfNew( "Player 1", 100 )
+scoreIce:storeIfNew( "Player 2", 500 )
+scoreIce:storeIfNew( "Player 3", 1000 )
+scoreIce:storeIfNew( "Player 4", 2500 )
+scoreIce:storeIfNew( "Player 5", 5000 )
+
+minScore = ice:loadBox( "minScore" )
+maxScore = ice:loadBox( "maxScore" )
+scoreIce:save()
+optionIce:save()
+
+
+musicSound = optionIce:retrieve("musicSound")
+gameSound = optionIce:retrieve("gameSound")
+promotionVersion = optionIce:retrieve("promotionVersion")
+promotionLastRefreshTime = optionIce:retrieve("promotionLastRefreshTime")
+promotionRefreshInterval = optionIce:retrieve("promotionRefreshInterval")
+if musicSound == 1 then 
+    audio.setVolume(1,{channel = 1})
+else
+    audio.setVolume(0,{channel = 1})	
+end
+if gameSound == 1 then
+    audio.setVolume(1,{channel = 2})	
+else
+    audio.setVolume(0,{channel = 2})	
+end		
 
 bgChannel = audio.play( mainMenuBgSound, { channel=1, loops=-1, fadein=3000 } )
 
 local function gameSettings( event )
-	if ( event.isError ) then
-		print( "Network error!")
-	else
-		print ( "game settings RESPONSE:"  )
-		local t = json.decode( event.response )
-
-		-- Go through the array in a loop
-		if t.save_settings == true then
-			print("settings saved")
-			loadsave.saveTable( t, "settings.json" )
-		end
-
-	end
+    if ( event.isError ) then
+        print( "Network error!")
+    else
+        print ( "game settings RESPONSE:"  )
+        local t = json.decode( event.response )
+        
+        -- Go through the array in a loop
+        if t.save_settings == true then
+            print("settings saved")
+            loadsave.saveTable( t, "settings.json" )
+        end
+        
+    end
 end
 
 local function gamePromotion( event )
-	if ( event.isError ) then
-		print( "Network error!")
-	else
-
-		print ( "promotion settings RESPONSE:"  )
-		local t = json.decode( event.response )
-		-- Go through the array in a loop
-		if t then
-			if  promotionVersion < t.version or os.time() - promotionLastRefreshTime > promotionRefreshInterval then
-				print("NEW settings")
-				optionIce:store( "promotionVersion", t.version )
-				optionIce:store( "promotionLastRefreshTime", os.time() )
-				optionIce:store( "promotionRefreshInterval", t.refresh_interval )
-				optionIce:save()
-				for k,v in pairs(t.data) do
-					network.download( v.image_url, "GET", function(event)
-						 if ( event.isError ) then
-					        print( "Network error - download failed" )
-					    elseif ( event.phase == "began" ) then
-					        print( "Progress Phase: began" )
-					    elseif ( event.phase == "ended" ) then
-					        print( "Displaying response image file" )
-					    end
-					end, v.image_name, system.DocumentsDirectory )
-					print(k,v)
-				end	
-			else
-				print("promotion refresh data",promotionRefreshInterval - (os.time() - promotionLastRefreshTime) .. " seconds left")
-			end	
-			if t.save_promotion then
-				print("save promotion settings")
-				loadsave.saveTable( t, "gamePromotion.json" )
-			end
-		end
-
-	end
+    if ( event.isError ) then
+        print( "Network error!")
+    else
+        
+        print ( "promotion settings RESPONSE:"  )
+        local t = json.decode( event.response )
+        -- Go through the array in a loop
+        if t then 
+            if  promotionVersion < t.version or os.time() - promotionLastRefreshTime > promotionRefreshInterval then
+                print("NEW settings")
+                optionIce:store( "promotionVersion", t.version )
+                optionIce:store( "promotionLastRefreshTime", os.time() )
+                optionIce:store( "promotionRefreshInterval", t.refresh_interval )
+                optionIce:save()
+                for k,v in pairs(t.data) do
+                    if v.game_package_name == system.getInfo( "androidAppPackageName" ) then
+                        print("removing index ", table.remove(t.data,table.indexOf(t.data,v)))
+                    else
+                        network.download( v.image_url, "GET", function(event)
+                            if ( event.isError ) then
+                                print( "Network error - download failed" )
+                            elseif ( event.phase == "ended" ) then
+                                print( "image downloaded" )
+                            end
+                        end, v.image_name, system.DocumentsDirectory )
+                    end
+                    
+                end	
+            else
+                print("promotion refresh data",promotionRefreshInterval - (os.time() - promotionLastRefreshTime) .. " seconds left")
+            end	
+            if t.save_promotion then
+                print("saving promotion settings")
+                loadsave.saveTable( t, "gamePromotion.json" )
+            end
+        end
+        
+    end
 end
 
 
