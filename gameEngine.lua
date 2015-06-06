@@ -280,7 +280,8 @@ GameEngine = {
         timer.pause( gameEngineTimer )
         transition.pause()
         gamePause = true ; 
-        transition.to(view, { time=100, x=display.contentCenterX})
+        transition.to(view, { time=100, x = TOTAL_WIDTH})
+        view:toFront()
         --SpriteAnim.pause()
     end,
     resume = function (view)

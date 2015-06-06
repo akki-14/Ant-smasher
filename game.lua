@@ -14,6 +14,8 @@ local maxScoreText
 local getMaxScore
 local pauseButton
 local pauseBar
+local pauseOverlay
+local pauseGroup
 --global
 lives = {}
 numLives = 3
@@ -86,19 +88,19 @@ end
  function pauseGame( event )
     local target = event.target
     if target.pauseState == true then
-        GameEngine.pause(pauseBar)
+        GameEngine.pause(pauseGroup)
         target.pauseState = false
-        showAds(target)
+--        showAds(target)
     else
-        GameEngine.resume(pauseBar)
+        GameEngine.resume(pauseGroup)
         target.pauseState = true
-        hideAds(target)
+--        hideAds(target)
     end
 end
 
 function scene:createScene(event)
     group = self.view
-    
+    pauseGroup = display.newGroup()
     numLives = 3
     score = 0
     gameOver = false
@@ -113,8 +115,11 @@ function scene:createScene(event)
     maxScoreText = display.newText(group,getMaxScore , display.viewableContentWidth - 135 , bufferHeight + 65 ,"Base 02",30)
     pauseButton = display.newImage(group,"images/pause.png",display.contentCenterX, bufferHeight + 140)
     pauseButton.pauseState = true
-    pauseBar = display.newImage(group,"images/pause_bar.png",-display.contentCenterX, display.contentCenterY)
-    
+    pauseBar = display.newImage(pauseGroup,"images/pause_bar.png",-display.contentCenterX, display.contentCenterY)
+    pauseOverlay = display.newRect(pauseGroup, -CENTER_X, CENTER_Y, TOTAL_WIDTH, TOTAL_HEIGHT)
+    pauseOverlay:setFillColor(0, 0, 0)
+    pauseOverlay.alpha = 0.6
+    group:insert(pauseGroup)
     --CreateAnt.new(group)
     --timer.performWithDelay(2500,aaa,10)
     --CreateAntOrbit.new(group)
