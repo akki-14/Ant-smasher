@@ -241,7 +241,7 @@ GameEngine = {
         function aaa(event)
             CreateAnt.new(antGroup,seq[1])
                     Frog.new(antGroup,"frog")
-                    CreateAntOrbit.new(group,beeGroup,"bee")
+--                    CreateAntOrbit.new(group,beeGroup,"bee")
             --CreateAntBoss.new(group,seq[4])
             --CreateAntRoam.new(group,seq[4],200)
             --CreateKingAnt.new(group,seq[1])

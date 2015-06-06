@@ -52,7 +52,7 @@ Frog = {
         
         function jump()
             if not gameOver then
-                if frog ~= nil then
+                if frog ~= nil and not gamePause then
                     frog:play()
                         transition.to(frog,{y = frog.y - hopValue, time = endTime, onComplete = function() 
                             if frog.y <= finalPoint then

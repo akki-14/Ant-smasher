@@ -233,8 +233,7 @@ SpriteAnim = {
         if gameOver == true then
             event.target:pause()
         end
-        
-        
+                     
     end,
     
     endLife = function(obj)

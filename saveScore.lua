@@ -162,7 +162,7 @@ end,
 		for i = 1, #score_value do
 			
 		end
-		minScore:store("min",score_value[10])
+		minScore:store("min",score_value[5])
 		minScore:save()
 		maxScore:store("max",score_value[1])
 		maxScore:save()
@@ -180,7 +180,7 @@ end,
 			local srNo = {}
 			local y_cor = -display.viewableContentHeight + 300
 			local font = "Base 02"
-			for i = 1, 10 do
+			for i = 1, 5 do
 				srNo[i] = display.newText(gp, i .. ". ", 150 , y_cor , font, 40 )
 				srNo[i].x = 100
 				player[i] = display.newText(gp,tempName[i], 150 , y_cor , font, 40 )
@@ -190,7 +190,7 @@ end,
 				player[i]:setFillColor(1,1,1)
 				player_score[i] = display.newText(gp, tempScore[i], 550 , y_cor , font, 40 )
 				player_score[i]:setFillColor(0.8,0.3,0.5)
-				y_cor = y_cor + 70
+				y_cor = y_cor + 120
 			end
 		
 		

@@ -35,8 +35,9 @@ function M.new(initX,initY,grp,sceneGrp,direction)
                     table.insert(antStack,antGroup[i])
                 end
             end
+            
             for k,v in pairs(antStack) do
---                print("remove",v)
+                --                print("remove",v)
                 transition.cancel(v)
                 showKilledObj()
                 Smash.new{target = v}
@@ -74,18 +75,20 @@ function M.new(initX,initY,grp,sceneGrp,direction)
     
     function startWalking(event)
         local target = event.target
-        if target.sequence == "still" then
-            if target.direction == "left" then
-                walkLeft(target)
+        if not gamePause then
+            if target.sequence == "still" then
+                if target.direction == "left" then
+                    walkLeft(target)
+                else
+                    walkRight(target)
+                end
+                if target.isEnterFrame ~= true then 
+                    target.isEnterFrame = true
+                    Runtime:addEventListener( "enterFrame", enterFrame)
+                end
             else
-                walkRight(target)
+                self.explode()
             end
-            if target.isEnterFrame ~= true then 
-                target.isEnterFrame = true
-                Runtime:addEventListener( "enterFrame", enterFrame)
-            end
-        else
-            self.explode()
         end
         
     end
@@ -94,18 +97,17 @@ function M.new(initX,initY,grp,sceneGrp,direction)
         local explode = SpriteAnim.explode()
         explode.x = x
         explode.y = y 
-        explode
-        :scale(2.7,2.5)
+        explode:scale(2.7,2.5)
         explode:play()
         sceneGrp:insert(explode)
         explode:addEventListener("sprite", function(event) 
             local target = event.target
             if event.phase == "ended" then
-                transition.to(target, {time = 700 ,alpha = 0.1 , onComplete = function() 
-                target:removeSelf()
-                target = nil
-                end
-                    })
+                    transition.to(target, {time = 700 ,alpha = 0.1 , onComplete = function() 
+                        target:removeSelf()
+                        target = nil
+                    end
+                })
             end
         end )
         SoundControl.explosion()
