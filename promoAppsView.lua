@@ -55,24 +55,24 @@ function new( promotionArray, path, slideBackground, top, bottom)
         
         background:setFillColor(0, 0, 0,0.8)
     end
-
+    
     cross = display.newImage("images/no.png")
     cross.x = screenW - cross.contentWidth
     cross.y = (screenH-(top+bottom)) - cross.contentHeight
-
+    
     if path then
         imagePath = system.DocumentsDirectory
     else
         imagePath = system.ResourceDirectory
     end    
-
+    
     g:insert(background)
     g:insert(cross)
-
+    
     cross:addEventListener("tap",function ()
         g.isVisible = false
     end)
-
+    
     local function action(event)
         local target = event.target
         system.openURL( "market://details?id=" .. target.package_name )
@@ -102,7 +102,7 @@ function new( promotionArray, path, slideBackground, top, bottom)
         
         sel[i] = display.newImage("images/unselected_position.png")
         local center =  math.modf(arraySize * 0.5) + 1
-
+        
         if arraySize % 2 == 0 then
             local diff	= sel[i].contentWidth * 1.5
             
@@ -125,7 +125,6 @@ function new( promotionArray, path, slideBackground, top, bottom)
         else 
             p.x = screenW * .5 + pad
         end
-        print(p.contentWidth,"dddd")
         p.y = h * .5 - 85
         p.package_name = promotionArray[i].game_package_name
         p:addEventListener("tap",action)
@@ -180,9 +179,9 @@ function new( promotionArray, path, slideBackground, top, bottom)
                 end]]--
                 
                 
---                if (images[imgNum-2]) then
---                    images[imgNum-2].x = images[imgNum-2].x + delta
---                end
+                --                if (images[imgNum-2]) then
+                --                    images[imgNum-2].x = images[imgNum-2].x + delta
+                --                end
                 if (images[imgNum-1]) then
                     images[imgNum-1].x = images[imgNum-1].x + delta
                 end
@@ -190,9 +189,9 @@ function new( promotionArray, path, slideBackground, top, bottom)
                 if (images[imgNum+1]) then
                     images[imgNum+1].x = images[imgNum+1].x + delta
                 end
---                if (images[imgNum+2]) then
---                    images[imgNum+2].x = images[imgNum+2].x + delta
---                end
+                --                if (images[imgNum+2]) then
+                --                    images[imgNum+2].x = images[imgNum+2].x + delta
+                --                end
                 
             elseif ( phase == "ended" or phase == "cancelled" ) then
                 
@@ -234,7 +233,6 @@ function new( promotionArray, path, slideBackground, top, bottom)
     end
     
     function nextImage()
-	print("next")
         local sides = images[imgNum].contentWidth * 0.5 - showSide
         tween = transition.to( images[imgNum-1], {time=400, x= (screenW * .5 + pad) * -1, transition=easing.outExpo } )
         tween = transition.to( images[imgNum], {time=400, x= pad - sides, transition=easing.outExpo } )
@@ -248,7 +246,6 @@ function new( promotionArray, path, slideBackground, top, bottom)
     end
     
     function prevImage()
-	print("prev")
         local sides = images[imgNum].contentWidth * 0.5 - showSide
         
         tween = transition.to( images[imgNum+1], {time=400, x=screenW * 1.5 + pad + sides , transition=easing.outExpo } )
@@ -262,14 +259,13 @@ function new( promotionArray, path, slideBackground, top, bottom)
     end
     
     function cancelMove()
-	print("cancel")
         local sides = images[imgNum].contentWidth * 0.5 - showSide
         
         tween = transition.to( images[imgNum], {time=400, x=screenW * .5 + pad, transition=easing.outExpo } )
         tween = transition.to( images[imgNum-1], {time=400, x= pad - sides, transition=easing.outExpo } )
---        tween = transition.to( images[imgNum-2], {time=400, x= (screenW * .5 + pad - sides) * -1, transition=easing.outExpo } )
+        --        tween = transition.to( images[imgNum-2], {time=400, x= (screenW * .5 + pad - sides) * -1, transition=easing.outExpo } )
         tween = transition.to( images[imgNum+1], {time=400, x=screenW + pad + sides, transition=easing.outExpo } )
---        tween = transition.to( images[imgNum+2], {time=400, x=screenW * 1.5 + pad + sides, transition=easing.outExpo } )
+        --        tween = transition.to( images[imgNum+2], {time=400, x=screenW * 1.5 + pad + sides, transition=easing.outExpo } )
     end
     
     function initImage(num)

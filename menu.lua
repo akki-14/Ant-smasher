@@ -146,7 +146,7 @@ function scene:createScene(event)
 end
 
 function initPromotion( )
-    if promotionSettings and promotionSettings.show_promotion == true then
+    if promotionSettings ~= nil and promotionSettings.show_promotion == true then
         local promoAppsView = require("promoAppsView")  
         local allPromotionGames = promotionSettings.data
         local myImages = {}

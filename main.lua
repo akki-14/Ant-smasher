@@ -142,6 +142,11 @@ local function gamePromotion( event )
         local t = json.decode( event.response )
         -- Go through the array in a loop
         if t then 
+            for k,v in pairs(t.data) do
+                if v.game_package_name == system.getInfo( "androidAppPackageName" ) then
+                    print("removing index ", table.remove(t.data,table.indexOf(t.data,v)))
+                end
+            end
             if  promotionVersion < t.version or os.time() - promotionLastRefreshTime > promotionRefreshInterval then
                 print("NEW settings")
                 optionIce:store( "promotionVersion", t.version )
@@ -149,17 +154,15 @@ local function gamePromotion( event )
                 optionIce:store( "promotionRefreshInterval", t.refresh_interval )
                 optionIce:save()
                 for k,v in pairs(t.data) do
-                    if v.game_package_name == system.getInfo( "androidAppPackageName" ) then
-                        print("removing index ", table.remove(t.data,table.indexOf(t.data,v)))
-                    else
-                        network.download( v.image_url, "GET", function(event)
-                            if ( event.isError ) then
-                                print( "Network error - download failed" )
-                            elseif ( event.phase == "ended" ) then
-                                print( "image downloaded" )
-                            end
-                        end, v.image_name, system.DocumentsDirectory )
-                    end
+                    
+                    network.download( v.image_url, "GET", function(event)
+                        if ( event.isError ) then
+                            print( "Network error - download failed" )
+                        elseif ( event.phase == "ended" ) then
+                            print( "image downloaded" )
+                        end
+                    end, v.image_name, system.DocumentsDirectory )
+                    
                     
                 end	
             else
