@@ -41,7 +41,7 @@ settings = {
 	
 	android =
         {
-                versionCode = "7",
+                versionCode = "8",
                 googlePlayGamesAppId = "542905232803", -- Your Google Play Games App Id
         },
 

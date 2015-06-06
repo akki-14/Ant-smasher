@@ -42,7 +42,7 @@ if serverSettings ~=nil then
         myAds.initAdmob()
     end
 else
-    myAds.initVungle()
+    myAds.initAdmob()
 end
 
 
@@ -82,6 +82,7 @@ optionIce:storeIfNew( "gameSound", 1 )
 optionIce:storeIfNew( "promotionLastRefreshTime", os.time() )
 optionIce:storeIfNew( "promotionVersion", 0 )
 optionIce:storeIfNew( "promotionRefreshInterval", 100 )
+optionIce:storeIfNew( "tutorial_shown", false )
 
 
 -- default scores
@@ -175,7 +176,7 @@ end
 
 
 
-network.request( "http://gaak.atwebpages.com/antsmasher.php", "GET", gameSettings )
+network.request( "http://gaak.atwebpages.com/game_settings.php", "GET", gameSettings )
 network.request( "http://gaak.atwebpages.com/gamePromotion.php", "GET", gamePromotion )
 
 storyboard.gotoScene( "menu", "fade", 1000 )

@@ -214,7 +214,7 @@ SpriteAnim = {
 	{
             {
                 start = 1,
-                count = 11,
+                count = 12,
                 time=1200,
                 loopCount=1
             }

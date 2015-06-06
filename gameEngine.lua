@@ -277,18 +277,23 @@ GameEngine = {
 --        powerGroup:insert(powerThunder)
     end,
     pause = function (view)
-        timer.pause( gameEngineTimer )
-        transition.pause()
-        gamePause = true ; 
-        transition.to(view, { time=100, x = TOTAL_WIDTH})
-        view:toFront()
+        if gameEngineTimer ~= nil then
+            timer.pause( gameEngineTimer )
+            transition.pause()
+            gamePause = true ; 
+            transition.to(view, { time=100, x = TOTAL_WIDTH})
+            view:toFront()
+        end
         --SpriteAnim.pause()
     end,
     resume = function (view)
-        timer.resume( gameEngineTimer )
-        transition.resume()
-        gamePause = false
-        transition.to( view, { time=100, x=-display.contentCenterX})
+        
+        if gameEngineTimer ~= nil then
+            timer.resume( gameEngineTimer )
+            transition.resume()
+            gamePause = false
+            transition.to( view, { time=100, x=-display.contentCenterX})
+        end
         --SpriteAnim.resume()
         
     end

@@ -26,6 +26,8 @@ local onKeyEvent
 local scoreFront
 local adGroup = display.newGroup()
 local pauseGame
+local showTutorial
+local tutorialGroup
 
 
 local function getAds()
@@ -85,22 +87,43 @@ local function hideAds(target)
             target:addEventListener("tap",pauseGame)
     end })
 end
- function pauseGame( event )
+function pauseGame( event )
     local target = event.target
     if target.pauseState == true then
         GameEngine.pause(pauseGroup)
         target.pauseState = false
---        showAds(target)
+        --        showAds(target)
     else
         GameEngine.resume(pauseGroup)
         target.pauseState = true
---        hideAds(target)
+        --        hideAds(target)
     end
+end
+    
+function showTutorial(grp)
+    grp:insert(tutorialGroup)
+    local tutorialShadow = display.newRect(tutorialGroup, CENTER_X, CENTER_Y, TOTAL_WIDTH, TOTAL_HEIGHT)
+    tutorialShadow:setFillColor(0, 0, 0)
+    tutorialShadow.alpha = 0.6
+    local tutorial = display.newImage(tutorialGroup, "images/tutorial.png",CENTER_X,CENTER_Y)
+    local tutorialClose = display.newImage(tutorialGroup, "images/no.png",tutorial.contentBounds.xMax,tutorial.contentBounds.yMin )
+    
+    local tutorialHide = function(event) 
+        GameEngine.new(group,roamingBomb) 
+        tutorialGroup.alpha = 0
+        optionIce:store( "tutorial_shown", true )
+        optionIce:save()
+    end
+    
+    
+    tutorial:addEventListener("tap", tutorialHide)
+    tutorialClose:addEventListener("tap", tutorialHide)
 end
 
 function scene:createScene(event)
     group = self.view
     pauseGroup = display.newGroup()
+    tutorialGroup = display.newGroup()
     numLives = 3
     score = 0
     gameOver = false
@@ -120,12 +143,12 @@ function scene:createScene(event)
     pauseOverlay:setFillColor(0, 0, 0)
     pauseOverlay.alpha = 0.6
     group:insert(pauseGroup)
-    --CreateAnt.new(group)
-    --timer.performWithDelay(2500,aaa,10)
-    --CreateAntOrbit.new(group)
-    GameEngine.new(group,roamingBomb)
     
-    print("game mmm",gameOver)
+    if optionIce:retrieve("tutorial_shown") == true then
+        GameEngine.new(group,roamingBomb)
+    else
+        showTutorial(group)
+    end
     
     function scoreFront(event)
         scoreText.text = score

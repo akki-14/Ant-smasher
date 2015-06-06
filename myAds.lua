@@ -21,10 +21,6 @@ local adType = nil
 function MyAds.initVungle()
 	local function adListener( event )
 	    if ( event.type == "adStart" and event.isError ) then
-	        native.showAlert( "Corona", event.response, { "OK", "Learn More" } )
-	    end
-	     if ( event.isError ) then
-	        native.showAlert( "Corona", event.response, { "OK", "Learn More" } )
 	    end
 	end
 	native.showAlert( "Corona", "showing Vungel", { "OK", "Learn More" } )
