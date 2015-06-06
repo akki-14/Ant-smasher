@@ -85,6 +85,7 @@ function new( promotionArray, path, slideBackground, top, bottom)
     local sel = {}
     local modes = {"kidMode","timeMode","arcade"}
     local arraySize = #promotionArray
+    local showSide = 50
     for i = 1,arraySize do
         local p = display.newImage(promotionArray[i].image_name,imagePath)
         local h = viewableScreenH-(top+bottom)
@@ -120,11 +121,11 @@ function new( promotionArray, path, slideBackground, top, bottom)
         if (i > 2) then
             p.x = screenW * 1.5 + pad -- all images offscreen except the first one
         elseif i == 2 then 
-            p.x = screenW + pad
+            p.x =  screenW + p.contentWidth/2 - showSide + pad
         else 
             p.x = screenW * .5 + pad
         end
-        
+        print(p.contentWidth,"dddd")
         p.y = h * .5 - 85
         p.package_name = promotionArray[i].game_package_name
         p:addEventListener("tap",action)
@@ -179,9 +180,9 @@ function new( promotionArray, path, slideBackground, top, bottom)
                 end]]--
                 
                 
-                if (images[imgNum-2]) then
-                    images[imgNum-2].x = images[imgNum-2].x + delta
-                end
+--                if (images[imgNum-2]) then
+--                    images[imgNum-2].x = images[imgNum-2].x + delta
+--                end
                 if (images[imgNum-1]) then
                     images[imgNum-1].x = images[imgNum-1].x + delta
                 end
@@ -189,9 +190,9 @@ function new( promotionArray, path, slideBackground, top, bottom)
                 if (images[imgNum+1]) then
                     images[imgNum+1].x = images[imgNum+1].x + delta
                 end
-                if (images[imgNum+2]) then
-                    images[imgNum+2].x = images[imgNum+2].x + delta
-                end
+--                if (images[imgNum+2]) then
+--                    images[imgNum+2].x = images[imgNum+2].x + delta
+--                end
                 
             elseif ( phase == "ended" or phase == "cancelled" ) then
                 
@@ -234,10 +235,11 @@ function new( promotionArray, path, slideBackground, top, bottom)
     
     function nextImage()
 	print("next")
+        local sides = images[imgNum].contentWidth * 0.5 - showSide
         tween = transition.to( images[imgNum-1], {time=400, x= (screenW * .5 + pad) * -1, transition=easing.outExpo } )
-        tween = transition.to( images[imgNum], {time=400, x= pad, transition=easing.outExpo } )
+        tween = transition.to( images[imgNum], {time=400, x= pad - sides, transition=easing.outExpo } )
         tween = transition.to( images[imgNum+1], {time=400, x=screenW * .5 + pad, transition=easing.outExpo } )
-        tween = transition.to( images[imgNum+2], {time=400, x=screenW + pad, transition=easing.outExpo } )
+        tween = transition.to( images[imgNum+2], {time=400, x=screenW + pad + sides, transition=easing.outExpo } )
         
         imgNum = imgNum + 1
         selected.x = sel[imgNum].x
@@ -247,10 +249,12 @@ function new( promotionArray, path, slideBackground, top, bottom)
     
     function prevImage()
 	print("prev")
-        tween = transition.to( images[imgNum+1], {time=400, x=screenW * 1.5 + pad, transition=easing.outExpo } )
-        tween = transition.to( images[imgNum], {time=400, x=screenW + pad, transition=easing.outExpo } )
+        local sides = images[imgNum].contentWidth * 0.5 - showSide
+        
+        tween = transition.to( images[imgNum+1], {time=400, x=screenW * 1.5 + pad + sides , transition=easing.outExpo } )
+        tween = transition.to( images[imgNum], {time=400, x=screenW + pad + sides, transition=easing.outExpo } )
         tween = transition.to( images[imgNum-1], {time=400, x=screenW * .5 + pad, transition=easing.outExpo } )
-        tween = transition.to( images[imgNum-2], {time=400, x=pad, transition=easing.outExpo } )
+        tween = transition.to( images[imgNum-2], {time=400, x=pad - sides, transition=easing.outExpo } )
         imgNum = imgNum - 1
         selected.x = sel[imgNum].x
         selected.y = sel[imgNum].y
@@ -259,11 +263,13 @@ function new( promotionArray, path, slideBackground, top, bottom)
     
     function cancelMove()
 	print("cancel")
+        local sides = images[imgNum].contentWidth * 0.5 - showSide
+        
         tween = transition.to( images[imgNum], {time=400, x=screenW * .5 + pad, transition=easing.outExpo } )
-        tween = transition.to( images[imgNum-1], {time=400, x= pad, transition=easing.outExpo } )
-        tween = transition.to( images[imgNum-2], {time=400, x= (screenW * .5 + pad) * -1, transition=easing.outExpo } )
-        tween = transition.to( images[imgNum+1], {time=400, x=screenW + pad, transition=easing.outExpo } )
-        tween = transition.to( images[imgNum+2], {time=400, x=screenW * 1.5 + pad, transition=easing.outExpo } )
+        tween = transition.to( images[imgNum-1], {time=400, x= pad - sides, transition=easing.outExpo } )
+--        tween = transition.to( images[imgNum-2], {time=400, x= (screenW * .5 + pad - sides) * -1, transition=easing.outExpo } )
+        tween = transition.to( images[imgNum+1], {time=400, x=screenW + pad + sides, transition=easing.outExpo } )
+--        tween = transition.to( images[imgNum+2], {time=400, x=screenW * 1.5 + pad + sides, transition=easing.outExpo } )
     end
     
     function initImage(num)
