@@ -28,6 +28,8 @@ local adGroup = display.newGroup()
 local pauseGame
 local showTutorial
 local tutorialGroup
+local gameStartTime
+local gameEndTime
 
 
 local function getAds()
@@ -92,6 +94,7 @@ function pauseGame( event )
     if target.pauseState == true then
         GameEngine.pause(pauseGroup)
         target.pauseState = false
+        Analytics.logEvent("game_pause")
         --        showAds(target)
     else
         GameEngine.resume(pauseGroup)
@@ -120,36 +123,7 @@ function showTutorial(grp)
     tutorialClose:addEventListener("tap", tutorialHide)
 end
 
-function scene:createScene(event)
-    group = self.view
-    pauseGroup = display.newGroup()
-    tutorialGroup = display.newGroup()
-    numLives = 3
-    score = 0
-    gameOver = false
-    getBgIndex = optionIce:retrieve("background")
-    getMaxScore = maxScore:retrieve("max")
-    bg = display.newImage(group,"images/bg_game" .. getBgIndex .. ".jpg",display.contentCenterX,display.contentCenterY)
-    scoreBar = display.newImage(group,"images/score-bar.png",display.contentCenterX, bufferHeight + 140)
-    scoreText = display.newText(group,score , 140 , bufferHeight + 65 ,"Base 02",30)
-    for i=1,numLives do 
-        lives[i] = display.newImage(group,"images/life.png",display.contentCenterX - 90 + (50 * i) , bufferHeight + 65)
-    end
-    maxScoreText = display.newText(group,getMaxScore , display.viewableContentWidth - 135 , bufferHeight + 65 ,"Base 02",30)
-    pauseButton = display.newImage(group,"images/pause.png",display.contentCenterX, bufferHeight + 140)
-    pauseButton.pauseState = true
-    pauseBar = display.newImage(pauseGroup,"images/pause_bar.png",-display.contentCenterX, display.contentCenterY)
-    pauseOverlay = display.newRect(pauseGroup, -CENTER_X, CENTER_Y, TOTAL_WIDTH, TOTAL_HEIGHT)
-    pauseOverlay:setFillColor(0, 0, 0)
-    pauseOverlay.alpha = 0.6
-    group:insert(pauseGroup)
-    
-    if optionIce:retrieve("tutorial_shown") == true then
-        GameEngine.new(group,roamingBomb)
-    else
-        showTutorial(group)
-    end
-    
+
     function scoreFront(event)
         scoreText.text = score
         if(score > getMaxScore ) then
@@ -184,6 +158,39 @@ function scene:createScene(event)
         end
         return false
     end
+
+function scene:createScene(event)
+    group = self.view
+    pauseGroup = display.newGroup()
+    tutorialGroup = display.newGroup()
+    numLives = 3
+    score = 0
+    gameOver = false
+    getBgIndex = optionIce:retrieve("background")
+    getMaxScore = maxScore:retrieve("max")
+    bg = display.newImage(group,"images/bg_game" .. getBgIndex .. ".jpg",display.contentCenterX,display.contentCenterY)
+    scoreBar = display.newImage(group,"images/score-bar.png",display.contentCenterX, bufferHeight + 140)
+    scoreText = display.newText(group,score , 140 , bufferHeight + 65 ,"Base 02",30)
+    for i=1,numLives do 
+        lives[i] = display.newImage(group,"images/life.png",display.contentCenterX - 90 + (50 * i) , bufferHeight + 65)
+    end
+    maxScoreText = display.newText(group,getMaxScore , display.viewableContentWidth - 135 , bufferHeight + 65 ,"Base 02",30)
+    pauseButton = display.newImage(group,"images/pause.png",display.contentCenterX, bufferHeight + 140)
+    pauseButton.pauseState = true
+    pauseBar = display.newImage(pauseGroup,"images/pause_bar.png",-display.contentCenterX, display.contentCenterY)
+    pauseOverlay = display.newRect(pauseGroup, -CENTER_X, CENTER_Y, TOTAL_WIDTH, TOTAL_HEIGHT)
+    pauseOverlay:setFillColor(0, 0, 0)
+    pauseOverlay.alpha = 0.6
+    group:insert(pauseGroup)
+    
+    if optionIce:retrieve("tutorial_shown") == true then
+        GameEngine.new(group,roamingBomb)
+    else
+        showTutorial(group)
+    end
+    
+    --Analytics
+    gameStartTime = os.time(os.date( "*t" ))
     
 end
 
@@ -204,6 +211,8 @@ function scene:exitScene(event)
     Runtime:removeEventListener( "enterFrame", scoreFront)
     Runtime:removeEventListener( "key", onKeyEvent )
     transition.cancel()
+    gameEndTime = os.time(os.date('*t'))
+    Analytics.logEvent("game_play_time",{time = gameEndTime - gameStartTime , score = score})
 end
 
 function scene:destroyScene(event)

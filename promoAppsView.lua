@@ -32,7 +32,8 @@ local images = nil
 local prevX
 local touchListener, nextImage, prevImage, cancelMove, initImage
 local background
-local cross
+local closePromotions
+local promotionTitle
 local imageNumberText, imageNumberTextShadow
 local modeselector = {}
 local imagePath
@@ -53,12 +54,16 @@ function new( promotionArray, path, slideBackground, top, bottom)
         background.anchorX = 0
         background.anchorY = 0
         
-        background:setFillColor(0, 0, 0,0.8)
+        background:setFillColor(0, 0, 0,0.9)
     end
     
-    cross = display.newImage("images/no.png")
-    cross.x = screenW - cross.contentWidth
-    cross.y = (screenH-(top+bottom)) - cross.contentHeight
+    closePromotions = display.newImage("images/no.png")
+    closePromotions.x = screenW - closePromotions.contentWidth
+    closePromotions.y = (screenH-(top+bottom)) - closePromotions.contentHeight
+    
+    promotionTitle = display.newImage("images/promotion_title.png")
+    promotionTitle.x = CENTER_X
+    promotionTitle.y = top + bottom + 200  
     
     if path then
         imagePath = system.DocumentsDirectory
@@ -67,16 +72,17 @@ function new( promotionArray, path, slideBackground, top, bottom)
     end    
     
     g:insert(background)
-    g:insert(cross)
+    g:insert(closePromotions)
+    g:insert(promotionTitle)
     
-    cross:addEventListener("tap",function ()
+    closePromotions:addEventListener("tap",function ()
         g.isVisible = false
     end)
     
     local function action(event)
         local target = event.target
         system.openURL( "market://details?id=" .. target.package_name )
-        
+        Analytics.logEvent("promotion_click",{name = target.game_name})
     end
     
     
@@ -107,26 +113,28 @@ function new( promotionArray, path, slideBackground, top, bottom)
             local diff	= sel[i].contentWidth * 1.5
             
             sel[i].x = screenW * 0.5 +  (i - center + 0.5) * diff 
-            sel[i].y = screenH * 0.5 + 230
+            sel[i].y = screenH * 0.5 + 400
             print("modes",i,center)
         else
             
             --local sel[i] = display.newCircle(0,0,10)
             sel[i].x = screenW * 0.5 + (i - center) * sel[i].contentWidth * 2
-            sel[i].y = screenH * 0.5 + 230
+            sel[i].y = screenH * 0.5 + 400
         end
         g:insert(p)
         g:insert(sel[i])
         
         if (i > 2) then
             p.x = screenW * 1.5 + pad -- all images offscreen except the first one
-        elseif i == 2 then 
-            p.x =  screenW + p.contentWidth/2 - showSide + pad
+        elseif i == 2 then
+            local imageWidth = p.contentWidth
+            p.x =  screenW + imageWidth/2 - showSide + pad
         else 
             p.x = screenW * .5 + pad
         end
-        p.y = h * .5 - 85
+        p.y = h * .5 
         p.package_name = promotionArray[i].game_package_name
+        p.game_title = promotionArray[i].game_title
         p:addEventListener("tap",action)
         images[i] = p
     end

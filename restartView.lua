@@ -132,10 +132,12 @@ function scene:createScene(event)
 	function restartGame(event)
 		gameOver = false
 		storyboard.gotoScene( "game", "fade", 600 )
+                Analytics.logEvent("restart_game")
 	end
 	function menuReturn(event)
 		gameOver = false
 		storyboard.gotoScene( "menu", "fade", 600 )
+                Analytics.logEvent("return_main_menu")
 	end
 	
 	function onKeyEvent(event)

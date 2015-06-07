@@ -325,16 +325,19 @@ function scene:enterScene(event)
     
     local function goBalloon(event)
         if event.phase == "began" then
+            Analytics.logEvent("banner_ad",{name = "ballon"})
             system.openURL("market://details?id=com.gaakapps.balloonpop" )
         end
     end
     local function goDress(event)
         if event.phase == "began" then
+            Analytics.logEvent("banner_ad",{name = "dress up"})
             system.openURL("market://details?id=com.gaakapps.dressupfree" )
         end	
     end
     local function go2048(event)
         if event.phase == "began" then
+            Analytics.logEvent("banner_ad",{name = "2048"})
             system.openURL("market://details?id=com.gaakapps.pro2048" )
         end	
     end
@@ -486,8 +489,10 @@ function scene:enterScene(event)
     end
     
     function rateApp(event)
+        Analytics.logEvent("rate_app")
         system.openURL("market://details?id=com.gaakapps.antsmasher" )
     end
+    
     local function yes( event )
         native.requestExit()
         

@@ -13,6 +13,7 @@ settings = require("gameSettings")
 local loadsave = require("loadsave")
 local json = require("json")
 myAds = require("myAds")
+Analytics = require("analytics")
 
 local musicSound
 local gameSound
@@ -181,6 +182,7 @@ end
 
 network.request( "http://gaak.atwebpages.com/game_settings.php", "GET", gameSettings )
 network.request( "http://gaak.atwebpages.com/gamePromotion.php", "GET", gamePromotion )
+Analytics.init("XWNJRSQMWTQKGC3WYWWN")
 
 storyboard.gotoScene( "menu", "fade", 1000 )
 

@@ -35,6 +35,11 @@ settings = {
         {
             publisherId = "com.coronalabs"
         },
+        -- Flurry Analytics
+        ["CoronaProvider.analytics.flurry"] =
+        {
+            publisherId = "com.coronalabs"
+        }
         
 	        
     },
