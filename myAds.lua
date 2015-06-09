@@ -60,12 +60,6 @@ function MyAds.show(type)
  --        else
  --            chartboost.show( "interstitial" )
  --        end	
- 	elseif (adType == "inneractive") then
-		if type == nil then 
-			ads.show("banner",INNERACTIVE_PARAMS)
- 		else
- 			ads.show( type, INNERACTIVE_PARAMS )
-		end
 	end
 end
 

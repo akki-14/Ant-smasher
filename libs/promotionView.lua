@@ -1,27 +1,13 @@
--- slideView.lua
--- 
--- Version 1.0 
---
--- Copyright (C) 2010 Corona Labs Inc. All Rights Reserved.
---
--- Permission is hereby granted, free of charge, to any person obtaining a copy of 
--- this software and associated documentation files (the "Software"), to deal in the 
--- Software without restriction, including without limitation the rights to use, copy, 
--- modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
--- and to permit persons to whom the Software is furnished to do so, subject to the 
--- following conditions:
--- 
--- The above copyright notice and this permission notice shall be included in all copies 
--- or substantial portions of the Software.
--- 
--- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
--- INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
--- PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
--- FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
--- OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
--- DEALINGS IN THE SOFTWARE.
+-- require the library and call the first method initDefaults then make api call and pass listener to it onApiComplete
+-- rest just check for canShowPromo if true then showProtion else exit
 
 module(..., package.seeall)
+
+local M = {}
+require("ice")
+local loadsave = require("loadsave")
+local json = require("json")
+
 
 local screenW, screenH = display.contentWidth, display.contentHeight
 local viewableScreenW, viewableScreenH = display.viewableContentWidth, display.viewableContentHeight
@@ -38,7 +24,14 @@ local imageNumberText, imageNumberTextShadow
 local modeselector = {}
 local imagePath
 
-function new( promotionArray, path, slideBackground, top, bottom)	
+
+--Promotions
+local promotionGroup
+local promotionSavedData
+local promotionSettings
+
+
+M.new = function( promotionArray, path, slideBackground, top, bottom)	
     local pad = 0
     local top = top or 0 
     local bottom = bottom or 0
@@ -76,13 +69,13 @@ function new( promotionArray, path, slideBackground, top, bottom)
     g:insert(promotionTitle)
     
     closePromotions:addEventListener("tap",function ()
-        g.isVisible = false
+        M.hidePromotion()
     end)
     
     local function action(event)
         local target = event.target
         system.openURL( "market://details?id=" .. target.package_name )
-        Analytics.logEvent("promotion_click",{name = target.game_name})
+        Analytics.logEvent("promotion_click",{name = target.game_title})
     end
     
     
@@ -175,21 +168,6 @@ function new( promotionArray, path, slideBackground, top, bottom)
                 
                 images[imgNum].x = images[imgNum].x + delta
                 
-				--[[if(images[imgNum].x < screenW*.5  and images[imgNum].x > screenW*.5 - 100) then
-					if prevX ~=nil and prevX - images[imgNum].x > 0 then
-						images[imgNum]:scale(1 + (1 /100),1 + (1 /100))
-					print("bbbb",delta)
-					else
-						images[imgNum]:scale(1 - (1 /100),1 - (1 /100))
-					print(prevX)
-					end
-					prevX = images[imgNum].x
-                end]]--
-                
-                
-                --                if (images[imgNum-2]) then
-                --                    images[imgNum-2].x = images[imgNum-2].x + delta
-                --                end
                 if (images[imgNum-1]) then
                     images[imgNum-1].x = images[imgNum-1].x + delta
                 end
@@ -197,9 +175,6 @@ function new( promotionArray, path, slideBackground, top, bottom)
                 if (images[imgNum+1]) then
                     images[imgNum+1].x = images[imgNum+1].x + delta
                 end
-                --                if (images[imgNum+2]) then
-                --                    images[imgNum+2].x = images[imgNum+2].x + delta
-                --                end
                 
             elseif ( phase == "ended" or phase == "cancelled" ) then
                 
@@ -227,10 +202,6 @@ function new( promotionArray, path, slideBackground, top, bottom)
         
         return true
         
-    end
-    
-    function setSlideNumber()
-        --print("setSlideNumber", imgNum .. " of " .. #images)
     end
     
     function cancelTween()
@@ -276,38 +247,8 @@ function new( promotionArray, path, slideBackground, top, bottom)
         --        tween = transition.to( images[imgNum+2], {time=400, x=screenW * 1.5 + pad + sides, transition=easing.outExpo } )
     end
     
-    function initImage(num)
-        if (num < #images) then
-            images[num+1].x = screenW * 1.5 + pad			
-        end
-        if (num > 1) then
-            images[num-1].x = (screenW * .5 + pad) * -1
-        end
-        setSlideNumber()
-    end
-    
     background.touch = touchListener
     background:addEventListener( "touch", background )
-    
-    ------------------------
-    -- Define public methods
-    
-    function g:jumpToImage(num)
-        local i
-        print("jumpToImage")
-        print("#images", #images)
-        for i = 1, #images do
-            if i < num then
-                images[i].x = -screenW*.5;
-            elseif i > num then
-                images[i].x = screenW*1.5 + pad
-            else
-                images[i].x = screenW*.5 - pad
-            end
-        end
-        imgNum = num
-        initImage(imgNum)
-    end
     
     function g:cleanUp()
         print("slides cleanUp")
@@ -317,3 +258,111 @@ function new( promotionArray, path, slideBackground, top, bottom)
     return g	
 end
 
+M.initPromotion = function()
+    if promotionSettings ~= nil and promotionSettings.show_promotion == true then
+        promotionGroup = M.new( promotionSettings.data,promotionSettings.image_path )
+        return(promotionGroup)
+    else 
+        return nil
+    end
+end
+
+M.showPromotion = function()
+    if promotionGroup ~= nil then
+        promotionGroup.isVisible = true
+    else
+        return M.initPromotion()
+    end
+    return promotionGroup
+end
+
+M.hidePromotion = function()
+    if promotionGroup ~= nil then
+        promotionGroup.isVisible = false
+    end
+end
+
+M.canShowPromotion = function()
+    local defaultReshow = 10
+    promotionSettings = loadsave.loadTable("gamePromotion.json")
+    if promotionSettings ~= nil and promotionSettings.reshow_interval then
+        defaultReshow = promotionSettings.reshow_interval
+    end
+    
+    local time = promotionSavedData:retrieve("promtionShowTime")
+    if not time then
+        promotionSavedData:store( "promtionShowTime", os.time() )
+        promotionSavedData:save()
+        return true
+    else
+        local timeDiff = os.difftime(os.time() - time)
+        if timeDiff > defaultReshow or timeDiff < 0 then
+            promotionSavedData:store( "promtionShowTime", os.time() )
+            promotionSavedData:save()
+            return true
+        else
+            print(defaultReshow - timeDiff,"seconds left to show promotions")
+            return false
+        end       
+    end
+    return true
+end
+
+M.initDefaults = function()
+    promotionSavedData = ice:loadBox( "promotionBox" )
+    promotionSavedData:storeIfNew( "promotionLastRefreshTime", os.time() )
+    promotionSavedData:storeIfNew( "promotionVersion", 0 )
+    promotionSavedData:storeIfNew( "promotionRefreshInterval", 100 )
+    promotionSavedData:save()
+end
+
+M.onApiComplete = function( event )
+    if ( event.isError ) then
+        print( "Network error!")
+    else
+        print( "API Success")
+        local promotionVersion = promotionSavedData:retrieve("promotionVersion")
+        local promotionLastRefreshTime = promotionSavedData:retrieve("promotionLastRefreshTime")
+        local promotionRefreshInterval = promotionSavedData:retrieve("promotionRefreshInterval")
+        
+        local t = json.decode( event.response )
+        -- Go through the array in a loop
+        if t then 
+            for k,v in pairs(t.data) do
+                if v.game_package_name == system.getInfo( "androidAppPackageName" ) then
+                    table.remove(t.data,table.indexOf(t.data,v))
+                end
+            end
+            if  promotionVersion < t.version or os.time() - promotionLastRefreshTime > promotionRefreshInterval then
+                print("NEW settings")
+                promotionSavedData:store( "promotionVersion", t.version )
+                promotionSavedData:store( "promotionLastRefreshTime", os.time() )
+                promotionSavedData:store( "promotionRefreshInterval", t.refresh_interval )
+                promotionSavedData:save()
+                for k,v in pairs(t.data) do
+                    
+                    network.download( v.image_url, "GET", function(event)
+                        if ( event.isError ) then
+                            print( "Network error - download failed" )
+                        elseif ( event.phase == "ended" ) then
+                            print( "image downloaded successfully" )
+                        end
+                    end, v.image_name, system.DocumentsDirectory )
+                    
+                    
+                end	
+            else
+                print("Time to refresh promotion data",promotionRefreshInterval - (os.time() - promotionLastRefreshTime) .. " seconds")
+            end	
+            if t.save_promotion then
+                print("saving promotion settings")
+                loadsave.saveTable( t, "gamePromotion.json" )
+            end
+        end
+        
+    end
+    
+end
+
+
+return M

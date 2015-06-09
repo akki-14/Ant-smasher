@@ -12,6 +12,7 @@ require("rateThisApp").rateThis("market://details?id=com.gaakapps.antsmasher")
 settings = require("gameSettings")
 local loadsave = require("loadsave")
 local json = require("json")
+local promotionView = require("libs.promotionView")
 myAds = require("myAds")
 Analytics = require("analytics")
 
@@ -30,7 +31,6 @@ timerId = nil
 gamePause = false
 
 serverSettings = loadsave.loadTable("settings.json")
-promotionSettings = loadsave.loadTable("gamePromotion.json")
 
 if serverSettings ~=nil then
     if serverSettings.ad_type == "vungle" then
@@ -80,9 +80,6 @@ optionIce = ice:loadBox( "values" )
 optionIce:storeIfNew( "background", 1 )
 optionIce:storeIfNew( "musicSound", 1 )
 optionIce:storeIfNew( "gameSound", 1 )
-optionIce:storeIfNew( "promotionLastRefreshTime", os.time() )
-optionIce:storeIfNew( "promotionVersion", 0 )
-optionIce:storeIfNew( "promotionRefreshInterval", 100 )
 optionIce:storeIfNew( "tutorial_shown", false )
 
 
@@ -102,9 +99,6 @@ optionIce:save()
 
 musicSound = optionIce:retrieve("musicSound")
 gameSound = optionIce:retrieve("gameSound")
-promotionVersion = optionIce:retrieve("promotionVersion")
-promotionLastRefreshTime = optionIce:retrieve("promotionLastRefreshTime")
-promotionRefreshInterval = optionIce:retrieve("promotionRefreshInterval")
 if musicSound == 1 then 
     audio.setVolume(1,{channel = 1})
 else
@@ -134,54 +128,9 @@ local function gameSettings( event )
     end
 end
 
-local function gamePromotion( event )
-    if ( event.isError ) then
-        print( "Network error!")
-    else
-        
-        print ( "promotion settings RESPONSE:"  )
-        local t = json.decode( event.response )
-        -- Go through the array in a loop
-        if t then 
-            for k,v in pairs(t.data) do
-                if v.game_package_name == system.getInfo( "androidAppPackageName" ) then
-                    print("removing index ", table.remove(t.data,table.indexOf(t.data,v)))
-                end
-            end
-            if  promotionVersion < t.version or os.time() - promotionLastRefreshTime > promotionRefreshInterval then
-                print("NEW settings")
-                optionIce:store( "promotionVersion", t.version )
-                optionIce:store( "promotionLastRefreshTime", os.time() )
-                optionIce:store( "promotionRefreshInterval", t.refresh_interval )
-                optionIce:save()
-                for k,v in pairs(t.data) do
-                    
-                    network.download( v.image_url, "GET", function(event)
-                        if ( event.isError ) then
-                            print( "Network error - download failed" )
-                        elseif ( event.phase == "ended" ) then
-                            print( "image downloaded" )
-                        end
-                    end, v.image_name, system.DocumentsDirectory )
-                    
-                    
-                end	
-            else
-                print("promotion refresh data",promotionRefreshInterval - (os.time() - promotionLastRefreshTime) .. " seconds left")
-            end	
-            if t.save_promotion then
-                print("saving promotion settings")
-                loadsave.saveTable( t, "gamePromotion.json" )
-            end
-        end
-        
-    end
-end
-
-
-
 network.request( "http://gaak.atwebpages.com/game_settings.php", "GET", gameSettings )
-network.request( "http://gaak.atwebpages.com/gamePromotion.php", "GET", gamePromotion )
+promotionView.initDefaults()
+network.request( "http://gaak.atwebpages.com/test_promotion.php", "GET", promotionView.onApiComplete )
 Analytics.init("XWNJRSQMWTQKGC3WYWWN")
 
 storyboard.gotoScene( "menu", "fade", 1000 )

@@ -1,5 +1,6 @@
 require("soundControl")
 local scene = storyboard.newScene()
+local promotionView = require("libs.promotionView")
 gameNetwork = require "gameNetwork"
 
 -- Init game network to use Google Play game services
@@ -39,12 +40,6 @@ local promoGroup
 local onKeyEvent
 local exitGame
 
---Promotions
-local promotionGroup
-local initPromotion
-local hidePromotion
-local showPromotion
-local shouldShowPromotion
 
 
 
@@ -144,55 +139,6 @@ function scene:createScene(event)
     timer.performWithDelay( 2000, checkLoggedIn )
     
 end
-
-function initPromotion( )
-    if promotionSettings ~= nil and promotionSettings.show_promotion == true then
-        local promoAppsView = require("promoAppsView")  
-        local allPromotionGames = promotionSettings.data
-        local myImages = {}
-        if allPromotionGames then
-            promotionGroup = promoAppsView.new( allPromotionGames,promotionSettings.image_path )
-            bgGroup:insert(promotionGroup)
-        end       
-    end
-end
-
-function show_promotion()
-    if promotionGroup then
-        promotionGroup.isVisible = true
-    else
-        initPromotion()
-    end
-end
-
-function hidePromotion()
-    promotionGroup.isVisible = false
-end
-
-function shouldShowPromotion()
-    local defaultReshow = 10
-    if promotionSettings and promotionSettings.reshow_interval then
-        defaultReshow = promotionSettings.reshow_interval
-    end
-
-    local time = optionIce:retrieve("promtionShowTime")
-    if not time then
-        optionIce:store( "promtionShowTime", os.time() )
-        optionIce:save()
-        return true
-    else
-        local timeDiff = os.difftime(os.time() - time)
-        if timeDiff > defaultReshow or timeDiff < 0 then
-            optionIce:store( "promtionShowTime", os.time() )
-            optionIce:save()
-            return true
-        else
-            print(defaultReshow - timeDiff,"seconds left to show promotions")
-            return false
-        end       
-    end
-end
-
 
 function scene:enterScene(event)
     --sort the scores
@@ -552,8 +498,8 @@ function scene:destroyScene(event)
 end
 
 function exitGame()
-    if shouldShowPromotion() then
-        show_promotion()
+    if promotionView.canShowPromotion() and promotionView.showPromotion() ~= nil then
+        promotionView.showPromotion()
     else
         print("exit game")
         native.requestExit()    
