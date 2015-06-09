@@ -1,6 +1,9 @@
 local M = {}
 
-M.share = function()
+-- add dependencies plugin in build settings 
+
+
+M.share = function(imageName,gameMessage)
     local popupName = "social"
     local isAvailable = native.canShowPopup( popupName, "share" )
     if isAvailable then
@@ -13,16 +16,15 @@ M.share = function()
         native.showPopup( popupName,
         {
             service = "share", -- The service key is ignored on Android.
-            message = "Checkouth this awesome new Game i Played",
+            message = gameMessage,
             listener = listener,
             image = 
             {
-                { filename = "images/ant_logo.png", baseDir = system.ResourceDirectory },
+                { filename = imageName, baseDir = system.ResourceDirectory },
             },
             url = 
             { 
-                "https://play.google.com/store/apps/details?id=com.gaakapps.antsmasher",
-                "market://details?id=com.gaakapps.antsmasher"
+                "https://play.google.com/store/apps/details?id=" .. system.getInfo( "androidAppPackageName" )
             }
         })
     else

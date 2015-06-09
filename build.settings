@@ -3,60 +3,66 @@
 -- Copyright 2013 . All Rights Reserved.
 
 settings = {
-	orientation =
-	{
-		--default = "landscapeRight",
-	},
-	
-	
-	 plugins =
+    orientation =
     {
+        --default = "landscapeRight",
+    },
+    
+    
+    plugins =
+    {        
     	["plugin.google.play.services"] =
         {
             publisherId = "com.coronalabs"
         },  
-
+        
         -- key is the name passed to Lua's 'require()'
-		["CoronaProvider.gameNetwork.google"] =
-		{
-			-- required
-			publisherId = "com.coronalabs",
-			supportedPlatforms = { android = true }
-		},
-
-
-		 ["CoronaProvider.ads.vungle"] =
-	   	{
-	      publisherId = "com.vungle",
-	   	},
-
+        ["CoronaProvider.gameNetwork.google"] =
+        {
+            -- required
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { android = true }
+        },
+        
+        ["CoronaProvider.ads.vungle"] =
+        {
+            publisherId = "com.vungle",
+        },
+        
         -- FACEBOOK PLUGIN
-         ["facebook"] =
+        ["facebook"] =
         {
             publisherId = "com.coronalabs"
         },
+        
         -- Flurry Analytics
         ["CoronaProvider.analytics.flurry"] =
         {
             publisherId = "com.coronalabs"
+        },
+        
+        -- Social Popup
+        ["CoronaProvider.native.popup.social"] =
+        {
+            publisherId = "com.coronalabs"
         }
         
-	        
+        
     },
-	
-	android =
-        {
-                versionCode = "8",
-                googlePlayGamesAppId = "542905232803", -- Your Google Play Games App Id
-        },
-
-        androidPermissions =
-        {
-            "android.permission.WRITE_EXTERNAL_STORAGE",
-			"android.permission.READ_PHONE_STATE",
-			"android.permission.VIBRATE",
-            "android.permission.ACCESS_NETWORK_STATE",
-        },
-	
-	
+    
+    android =
+    {
+        versionCode = "8",
+        googlePlayGamesAppId = "542905232803", -- Your Google Play Games App Id
+    },
+    
+    androidPermissions =
+    {
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_PHONE_STATE",
+        "android.permission.VIBRATE",
+        "android.permission.ACCESS_NETWORK_STATE",
+    },
+    
+    
 }

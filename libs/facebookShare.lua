@@ -1,14 +1,8 @@
 local json = require("json")
 local facebook = require("facebook")
 local fbCommand
-local LOGOUT = 1
-local SHOW_DIALOG = 2
-local SHARE_APP = 3
-local POST_PHOTO = 4
-local GET_USER_INFO = 5
-local GET_PLATFORM_INFO = 6
 local fbAppId
-
+local isLoggedIn = false
 local M = {}
 
 
@@ -21,24 +15,9 @@ local function fbListener( event )
             native.showAlert( "Facebook", "Login Fail" .. event.response )
             return
         else
+            isLoggedIn = true
             native.showAlert( "Facebook", "Login Successfull" .. event.response )
         end
-        
-        -- The following displays a Facebook dialog box for posting to your Facebook Wall
-        if fbCommand == SHOW_DIALOG then
-            M.showDialog()
-        end
-        
-        -- Request the current logged in user's info
-        if fbCommand == GET_USER_INFO then
-            facebook.request( "me" )
-        end
-        
-        -- This code posts a message to your Facebook Wall
-        if fbCommand == SHARE_APP then
-            M.shareApp()
-        end
-        -----------------------------------------------------------------------------------------
         
     elseif ( "request" == event.type ) then
         -- event.response is a JSON object from the FB server
@@ -72,10 +51,11 @@ local function fbListener( event )
 end
 
 
-M.init = function(appId)
+M.login = function(appId)
     fbAppId = appId
     facebook.login( appId, fbListener, {"email","publish_actions"} )
 end
+
 
 M.showDialog  = function()
     facebook.showDialog( "feed", {
@@ -102,5 +82,13 @@ M.sendAppRequest = function()
     facebook.showDialog( "apprequests", { message="Download this game and challenge me!" } )
 end
 
+
+M.requestMe = function()
+    if isLoggedIn then
+        facebook.request( "me" )
+    else
+        M.login(fbAppId,S)
+    end
+end
 
 return M
