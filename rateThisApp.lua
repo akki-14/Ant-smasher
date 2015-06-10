@@ -1,7 +1,7 @@
 
 module( ..., package.seeall )
 
-function rateThis(gameUrl)
+function rateThis()
     local thisRate = ice:loadBox( "myRate" );
     local time = thisRate:retrieve( "time" );
     -- IF YOU RESET THE CODE UNCOMMENT THE CODE BELLOW
@@ -45,28 +45,24 @@ function rateThis(gameUrl)
         -- IF TIME == 3 CALL THE VOTE;
         -- EVENT NATIVE ALERT FOR ANDROID
         local function votarandroid( event )
-            --local url_app = "http://www.getjar.mobi/mobile/766867"
-            --local url_app = "amzn://apps/android?p=com.cappoapps.antsmasher"
-            local url_app = gameUrl
-            
-            
             if "clicked" == event.action then
                 local i = event.index
                 if 1 == i then
-                    system.openURL(url_app )
+                    Analytics.logEvent("rate_app_click")
+                    system.openURL("market://details?id=" .. system.getInfo("androidAppPackageName") )
                     time = 5
                     thisRate:store("time",time);
                     thisRate:save();
                 elseif 2 == i then
-                    time = -3
+                    time = -2
                     thisRate:store("time",time);
                     thisRate:save();
                 end
             end
         end
-        
-        native.showAlert("Rate This App" , "How many Stars You'll Give !!!",
-        { "Ok", "Not Now" }, votarandroid )
+        Analytics.logEvent("rate_app_shown")
+        native.showAlert("ENJOYING The Game!!" , "How would you rate Ant Smasher",
+        { "Rate 5 stars", "Later" }, votarandroid )
         
     end
     

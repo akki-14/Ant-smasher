@@ -8,7 +8,7 @@ require("saveScore")
 -- require("shareApp")
 require("bounce")
 require("beat")
-require("rateThisApp").rateThis("market://details?id=com.gaakapps.antsmasher")
+require("rateThisApp").rateThis()
 settings = require("gameSettings")
 local loadsave = require("loadsave")
 local json = require("json")
@@ -130,7 +130,7 @@ end
 
 network.request( "http://gaak.atwebpages.com/game_settings.php", "GET", gameSettings )
 promotionView.initDefaults()
-network.request( "http://gaak.atwebpages.com/test_promotion.php", "GET", promotionView.onApiComplete )
+network.request( "http://gaak.atwebpages.com/gamePromotion.php", "GET", promotionView.onApiComplete )
 Analytics.init("XWNJRSQMWTQKGC3WYWWN")
 
 storyboard.gotoScene( "menu", "fade", 1000 )

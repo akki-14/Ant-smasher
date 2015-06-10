@@ -1,6 +1,7 @@
 require("soundControl")
 local scene = storyboard.newScene()
 local promotionView = require("libs.promotionView")
+local androidShare = require("libs.androidShare")
 gameNetwork = require "gameNetwork"
 
 -- Init game network to use Google Play game services
@@ -25,6 +26,7 @@ local googleLogin
 local googleLoginBack
 local googleLeaderBoard
 local googleLeaderBoardBack
+local shareGame
 local bgGroup
 local adBalloon
 local adDress
@@ -98,7 +100,9 @@ function scene:createScene(event)
     googleLeaderBoardBack = display.newImage(bgGroup,"images/leaderboard_online_selected.png",bufferWidth + 100 , display.viewableContentHeight - 500)
     googleLeaderBoardBack:scale(0.7,0.7)
     googleLeaderBoardBack.isVisible = false
-    
+    shareGame = display.newImage(bgGroup,"images/share_game.png")
+    shareGame.x = TOTAL_WIDTH + bufferWidth - shareGame.contentWidth / 2
+    shareGame.y = CENTER_Y - 200
     
     promoBanner = display.newImage(promoGroup,"images/promo.jpg",display.contentCenterX, display.contentCenterY - 200 - bufferHeight)
     promoYes = display.newImage(promoGroup,"images/yes.png",display.contentCenterX - promoBanner.contentWidth / 2 , display.contentCenterY - 200  - promoBanner.contentHeight / 2 - bufferHeight)
@@ -435,8 +439,8 @@ function scene:enterScene(event)
     end
     
     function rateApp(event)
-        Analytics.logEvent("rate_app")
-        system.openURL("market://details?id=com.gaakapps.antsmasher" )
+        Analytics.logEvent("rate_app_click")
+        system.openURL("market://details?id=".. system.getInfo("androidAppPackageName") )
     end
     
     local function yes( event )
@@ -453,6 +457,35 @@ function scene:enterScene(event)
         promoGroup.isVisible = false
         system.openURL("market://details?id=com.gaakapps.fruitshoot" )
     end 
+    
+    local function onClickShare(event)
+        local target = event.target
+        local bounds = target.contentBounds
+        
+        if event.phase == "began" then
+            
+            target:scale(1.25,1.25)
+            display.getCurrentStage():setFocus( target )
+            self.isFocus = true
+        elseif self.isFocus then
+            if event.phase == "moved" then
+            elseif event.phase == "ended" or event.phase == "cancelled" then
+                
+                
+                if(event.x > bounds.xMin  and event.x < bounds.xMax) then
+                    if  (event.y > bounds.yMin  and event.y < bounds.yMax) then
+                        androidShare.share("images/ant_logo.png", "Check out this cool new game i played.")
+                        Analytics.logEvent("android_share")
+                    end
+                end
+                
+                display.getCurrentStage():setFocus( nil )
+                target.isFocus = false
+                target:scale(0.8,0.8)
+            end
+        end
+        return true
+    end
     
     promoBanner:addEventListener("tap",openApp)
     promoYes:addEventListener("tap",yes)
@@ -479,6 +512,7 @@ function scene:enterScene(event)
     googleLoginBack:addEventListener("touch", googleServiceLogin)
     googleLeaderBoard:addEventListener("touch", showLeaderboardListener)
     googleLeaderBoardBack:addEventListener("touch", showLeaderboardListener)
+    shareGame:addEventListener("touch", onClickShare)
     Runtime:addEventListener( "key", onKeyEvent )
     
 end
@@ -499,6 +533,7 @@ end
 
 function exitGame()
     if promotionView.canShowPromotion() and promotionView.showPromotion() ~= nil then
+        Analytics.logEvent("promotion_shown")
         promotionView.showPromotion()
     else
         print("exit game")

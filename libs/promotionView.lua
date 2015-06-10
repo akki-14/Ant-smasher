@@ -320,7 +320,6 @@ M.onApiComplete = function( event )
     if ( event.isError ) then
         print( "Network error!")
     else
-        print( "API Success")
         local promotionVersion = promotionSavedData:retrieve("promotionVersion")
         local promotionLastRefreshTime = promotionSavedData:retrieve("promotionLastRefreshTime")
         local promotionRefreshInterval = promotionSavedData:retrieve("promotionRefreshInterval")
@@ -334,7 +333,7 @@ M.onApiComplete = function( event )
                 end
             end
             if  promotionVersion < t.version or os.time() - promotionLastRefreshTime > promotionRefreshInterval then
-                print("NEW settings")
+                print("new promotion settings")
                 promotionSavedData:store( "promotionVersion", t.version )
                 promotionSavedData:store( "promotionLastRefreshTime", os.time() )
                 promotionSavedData:store( "promotionRefreshInterval", t.refresh_interval )

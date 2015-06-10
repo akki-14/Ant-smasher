@@ -11,9 +11,8 @@ local CHARTBOOST_SIGNATURE_ID = "260aff912ffe646cbeee1d89cdace05ed94cf843";
 local INNERACTIVE_APP_ID = "cappoapps_AntSmasher_Android"
 
 
-local ADMOB_BANNER_PARAMS = { x=0, y=1170,interval=50,appId="ca-app-pub-2883837174861368/5479620739"}
-local ADMOB_PARAMS = { x=0, y=1125,interval=40,appId="ca-app-pub-2883837174861368/5479620739"}
-local ADMOB_INTERSTITIAL_PARAMS = { x=0, y=1125,interval=40,appId="ca-app-pub-2883837174861368/9196308735"}
+local ADMOB_BANNER_PARAMS = { x=0, y=1155,interval=30,appId=ADMOB_BANNER}
+local ADMOB_INTERSTITIAL_PARAMS = { x=0, y=1125,interval=40,appId=ADMOB_INTERSTITIAL}
 local VUNGLE_PARAMS = { isAnimated=false, isBackButtonEnabled=true }
 local INNERACTIVE_PARAMS =  { x=0, y=1170,interval=30}
 local adType = nil

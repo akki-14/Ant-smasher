@@ -128,8 +128,8 @@ GameEngine = {
                 elseif(antPattern == BOSS_ANT ) then
                     numOfAnts = 1
                 elseif(antPattern == FROG ) then
-                    DELAY_TIME = DELAY_TIME + 1000
-                    numOfAnts = math.random(1, 5);
+                    DELAY_TIME = DELAY_TIME + 200
+                    numOfAnts = math.random(5, 8);
                 end
                 
             elseif score  < 3500 then
@@ -154,8 +154,8 @@ GameEngine = {
                     numOfAnts = math.min(numOfAnts,4)
                     DELAY_TIME = DELAY_TIME + 2000
                 elseif(antPattern == FROG ) then
-                    DELAY_TIME = DELAY_TIME + 200
-                    numOfAnts = math.random(3, 6)
+                    DELAY_TIME = DELAY_TIME + 400
+                    numOfAnts = math.random(4, 6)
                 end
                 
             else
@@ -181,7 +181,7 @@ GameEngine = {
                     numOfAnts = math.min(numOfAnts,4)
                     DELAY_TIME = DELAY_TIME + 1800
                 elseif(antPattern == FROG ) then
-                    DELAY_TIME = DELAY_TIME + 600
+                    DELAY_TIME = DELAY_TIME + 300
                     numOfAnts = math.random(3, 6);
                 end
                 
@@ -246,8 +246,8 @@ GameEngine = {
             CreateAnt.new(antGroup,seq[1])
 --          Frog.new(antGroup,"frog")
 --          CreateAntOrbit.new(group,beeGroup,"bee")
-            --CreateAntBoss.new(group,seq[4])
-            --CreateAntRoam.new(group,seq[4],200)
+--            CreateAntBoss.new(antGroup,seq[4])
+            --CreateAntRoam.new(antGroup,seq[4],200)
             --CreateKingAnt.new(group,seq[1])
             --CreateAntSShape.new(group,seq[1])
             --CreateAntOrbit.new(group,"bee")

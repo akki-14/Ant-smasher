@@ -108,7 +108,7 @@ function scene:createScene(event)
         playerName = native.newTextField(display.contentCenterX, display.contentCenterY, 450, 100 )
         playerName:setReturnKey("done")
         playerName.placeholder = "Enter Name"
-        playerName.size = 28
+        playerName.size = 22
         playerName:setTextColor(0,0,0)
         playerName.align = "center"
         native.setKeyboardFocus( playerName )
@@ -156,11 +156,19 @@ function scene:createScene(event)
 end
 
 function scene:enterScene(event)
-    if math.random(3) == 2 then
+    if score < 300 then
         myAds.show()
-    else
-        myAds.show("interstitial") 
-    end	
+        else if score > 2000 then
+            myAds.show("interstitial") 
+        else
+            if math.random(3) == 2 then
+                myAds.show()
+            else
+                myAds.show("interstitial") 
+            end	
+            
+        end
+    end
     restart:addEventListener("tap",restartGame)
     home:addEventListener("tap",menuReturn)
     Runtime:addEventListener( "key", onKeyEvent )

@@ -40,7 +40,7 @@ function M.new(initX,initY,grp,sceneGrp,direction)
                 --                print("remove",v)
                 transition.cancel(v)
                 showKilledObj()
-                Smash.new{target = v}
+                Smash.new{target = v,isBombCollision = true}
                 v:removeSelf()
                 v = nil
                 if isAutoExplosion then

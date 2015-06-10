@@ -6,8 +6,8 @@ Frog = {
         local frog = SpriteAnim.frog()
         local valY 
         local jump
-        local hopValue = 140
-        local hopDelay = 1200
+        local hopValue = 130
+        local hopDelay = 1400
         local finalPoint = 50
         local jumpTimer
         frog.taps = 0
@@ -16,20 +16,20 @@ Frog = {
         if (score < 250 )then
             endTime = endTime
         elseif 	(score < 500 )then
-            hopValue = 160
+            hopValue = 150
         elseif  (score < 1000 )then
-            hopValue = 180
-            hopDelay = 1050
+            hopValue = 170
+            hopDelay = 1250
         elseif  (score < 2000 )then
-            hopValue = 190
+            hopValue = 180
             hopDelay = 1000
         elseif 	(score < 3000 )then
-            hopValue = 220
+            hopValue = 200
             hopDelay = 950
             endTime = endTime - 50
         elseif 	(score < 4000 )then
             endTime = endTime - 100
-            hopValue = 220
+            hopValue = 210
             hopDelay = 750
         else
             endTime = endTime - 100
