@@ -8,13 +8,13 @@ require("saveScore")
 -- require("shareApp")
 require("bounce")
 require("beat")
-require("rateThisApp").rateThis()
 settings = require("gameSettings")
 local loadsave = require("loadsave")
 local json = require("json")
 local promotionView = require("libs.promotionView")
 myAds = require("myAds")
 Analytics = require("analytics")
+require("rateThisApp").rateThis()
 
 local musicSound
 local gameSound

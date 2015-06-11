@@ -7,6 +7,7 @@ local M = {}
 require("ice")
 local loadsave = require("loadsave")
 local json = require("json")
+local Utils = require("libs.Utils")
 
 
 local screenW, screenH = display.contentWidth, display.contentHeight
@@ -260,7 +261,8 @@ end
 
 M.initPromotion = function()
     if promotionSettings ~= nil and promotionSettings.show_promotion == true then
-        promotionGroup = M.new( promotionSettings.data,promotionSettings.image_path )
+        local t = Utils.shuffleTable(promotionSettings.data)
+        promotionGroup = M.new(t ,promotionSettings.image_path )
         return(promotionGroup)
     else 
         return nil
