@@ -52,7 +52,7 @@ settings = {
     
     android =
     {
-        versionCode = "9",
+        versionCode = "10",
         googlePlayGamesAppId = "542905232803", -- Your Google Play Games App Id
     },
     
