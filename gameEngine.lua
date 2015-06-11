@@ -86,11 +86,7 @@ GameEngine = {
                     DELAY_TIME = 90
                 elseif(antPattern == LINE_ANT) then
                     posX = math.random(bufferWidth + 50,670 - bufferWidth)
-                    if score < 300 then
-                        DELAY_TIME = math.random(1100,1400)
-                    else
-                        DELAY_TIME = math.random(1000,1200)
-                    end
+                    DELAY_TIME = math.random(1000,1200)
                 elseif(antPattern == ZIG_ZAG_ANT ) then
                     if score < 300 then
                         DELAY_TIME = math.random(1100,1400)
@@ -98,11 +94,7 @@ GameEngine = {
                         DELAY_TIME = math.random(900,1200)
                     end
                 elseif(antPattern == TWIN_ANT ) then
-                    if score < 300 then
-                        DELAY_TIME = math.random(1100,1400)
-                    else
-                        DELAY_TIME = math.random(1000,1200)
-                    end
+                    DELAY_TIME = 1000
                 end
                 
             elseif score  < 1800 then
@@ -114,13 +106,13 @@ GameEngine = {
                 posX = 0
                 if(antPattern == LINE_ANT) then
                     posX = math.random(bufferWidth + 30,680 - bufferWidth)
-                    DELAY_TIME = DELAY_TIME - 100
+                    DELAY_TIME = DELAY_TIME - 400
                 elseif(antPattern == FLY_ROUTE ) then
                     DELAY_TIME = DELAY_TIME - 200
                 elseif(antPattern == FREE_ROAM_ANT ) then
                     DELAY_TIME = DELAY_TIME - 300
                 elseif(antPattern == TWIN_ANT ) then
-                    DELAY_TIME = math.min(DELAY_TIME,1300)
+                    DELAY_TIME = 800
                 elseif(antPattern == S_SHAPE_ANT ) then
                     DELAY_TIME = math.min(DELAY_TIME-300,1100)
                 elseif(antPattern == CROSSING_ANT or antPattern==FAST_ANT ) then
@@ -143,7 +135,7 @@ GameEngine = {
                     DELAY_TIME = 90
                 elseif(antPattern == LINE_ANT) then
                     posX = math.random(bufferWidth + 50,680 - bufferWidth)
-                    DELAY_TIME = DELAY_TIME - 200
+                    DELAY_TIME = 600
                 elseif(antPattern == ZIG_ZAG_ANT ) then
                     DELAY_TIME = DELAY_TIME - 300
                 elseif(antPattern == LINE_ANT ) then
@@ -152,7 +144,7 @@ GameEngine = {
                     DELAY_TIME = DELAY_TIME - 200
                 elseif(antPattern == KING_ANT ) then
                     numOfAnts = math.min(numOfAnts,4)
-                    DELAY_TIME = DELAY_TIME + 2000
+                    DELAY_TIME = DELAY_TIME + 1500
                 elseif(antPattern == FROG ) then
                     DELAY_TIME = DELAY_TIME + 400
                     numOfAnts = math.random(4, 6)
@@ -172,7 +164,7 @@ GameEngine = {
                     DELAY_TIME = DELAY_TIME
                 elseif(antPattern == LINE_ANT) then
                     posX = math.random(bufferWidth + 50,680 - bufferWidth)
-                    DELAY_TIME = DELAY_TIME- 300
+                    DELAY_TIME = 500
                 elseif(antPattern == CROSSING_ANT or antPattern==FAST_ANT ) then
                     DELAY_TIME = DELAY_TIME-400
                 elseif(antPattern == BOSS_ANT ) then
@@ -215,15 +207,17 @@ GameEngine = {
                     CreateAntOrbit.new(group,beeGroup,"bee")
                 elseif antPattern == FAST_ANT then
                     CreateAntFast.new(antGroup,seq[math.random(3)])
+                    delay = 3000
                 elseif antPattern == FLY_ROUTE then
                     FlyCreate.new(antGroup,"fly")
                 elseif antPattern == S_SHAPE_ANT then
                     CreateAntSShape.new(antGroup,seq[math.random(2)])
                 elseif antPattern == BOSS_ANT then
                     CreateAntBoss.new(antGroup,seq[4])
-                    delay = 5000
+                    delay = 7000
                 elseif antPattern == KING_ANT then
                     CreateKingAnt.new(antGroup,beeGroup,seq[math.random(2)])
+                    delay = 4000
                 elseif antPattern == FROG then
                     Frog.new(antGroup,"frog")
                 end
@@ -244,14 +238,17 @@ GameEngine = {
         
         function aaa(event)
             CreateAnt.new(antGroup,seq[1])
---          Frog.new(antGroup,"frog")
---          CreateAntOrbit.new(group,beeGroup,"bee")
+--            Frog.new(antGroup,"frog")
+--            CreateAntOrbit.new(group,beeGroup,"bee")
 --            CreateAntBoss.new(antGroup,seq[4])
-            --CreateAntRoam.new(antGroup,seq[4],200)
-            --CreateKingAnt.new(group,seq[1])
-            --CreateAntSShape.new(group,seq[1])
-            --CreateAntOrbit.new(group,"bee")
-            --FlyCreate.new(group,seq[1])
+--            CreateAntRoam.new(antGroup,seq[4],200)
+--            CreateKingAnt.new(group,seq[1])
+--            CreateAntSShape.new(antGroup,seq[1])
+--            CreateAntOrbit.new(group,beeGroup,"bee")
+--            FlyCreate.new(group,seq[1])
+--            CreateAntLine.new(antGroup, beeGroup, seq[1],math.random(30, 600))
+--            CreateAntTwin.new(antGroup, beeGroup, seq[1])
+--            CreateAntFast.new(antGroup, seq[1])
             if(event.count == 2) then
                 local temp = function(event)
                      calculate(score,10)

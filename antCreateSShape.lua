@@ -11,13 +11,13 @@ CreateAntSShape = {
             endTime = endTime 
         elseif 	(score < 1000 )then
             endTime = endTime - 200
-        elseif 	(score < 1500 )then
+        elseif 	(score < 2500 )then
             endTime = endTime - 300
-        elseif 	(score < 2000 )then
-            endTime = endTime - 400
         elseif 	(score < 3000 )then
+            endTime = endTime - 400
+        elseif 	(score < 5000 )then
             endTime = endTime - 500
-        elseif 	(score < 4000 )then
+        elseif 	(score < 7000 )then
             endTime = endTime - 600
         else
             endTime = endTime - 700

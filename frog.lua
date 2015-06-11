@@ -20,14 +20,14 @@ Frog = {
         elseif  (score < 1000 )then
             hopValue = 170
             hopDelay = 1250
-        elseif  (score < 2000 )then
+        elseif  (score < 3000 )then
             hopValue = 180
             hopDelay = 1000
-        elseif 	(score < 3000 )then
+        elseif 	(score < 5000 )then
             hopValue = 200
             hopDelay = 950
             endTime = endTime - 50
-        elseif 	(score < 4000 )then
+        elseif 	(score < 7000 )then
             endTime = endTime - 100
             hopValue = 210
             hopDelay = 750

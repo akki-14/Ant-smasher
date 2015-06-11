@@ -6,15 +6,21 @@ CreateAntFast = {
         
         local endTime = 2000
         local diffTime = 1000
-        if (score < 900 )then
-            endTime = math.random(1900,2100)
-            diffTime = 200
+        if (score < 500 )then
+            endTime = 2000
+            diffTime = 800
         elseif(score < 1700 )then
-            endTime = math.random(1700,1800)
-            diffTime = 200
+            endTime = 1800
+            diffTime = 800
+        elseif(score < 3000 )then
+            endTime = 1600
+            diffTime = 600
+        elseif(score < 7000 )then
+            endTime = 1500
+            diffTime = 500
         else
-            endTime = math.random(1500,1600)
-            diffTime = math.random(200,300)
+            endTime = 1400
+            diffTime = 400
         end	
         
         endTime = endTime * settings.gameSpeed
@@ -37,11 +43,11 @@ CreateAntFast = {
         ant:addEventListener( "sprite", SpriteAnim.spriteListener )
         
         
-            transition.to( ant, {  y = ant.y - math.random(200,300), time=endTime ,onComplete= function()  
+            transition.to( ant, {  y = ant.y - math.random(100,300), time=endTime ,onComplete= function()  
                 
-                    transition.to( ant, { y = ant.y - math.random(200,550), time=endTime - 1200,onComplete= function() 
+                    transition.to( ant, { y = 350, time = diffTime,onComplete= function() 
                         
-                            transition.to( ant, {  y = 0 , time=endTime ,onComplete= function() 
+                            transition.to( ant, {  y = 0 , time = endTime ,onComplete= function() 
                                 
                                 SpriteAnim.endLife(ant) ; ant:removeSelf(); ant = nil
                                 

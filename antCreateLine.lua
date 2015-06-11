@@ -9,12 +9,14 @@ CreateAntLine = {
             endTime = math.random(6000,7000)
         elseif (score < 900 )then
             endTime = math.random(5000,6000)
-        elseif (score < 1500 )then
-            endTime = math.random(3500,5100)
         elseif (score < 2000 )then
+            endTime = math.random(3500,5100)
+        elseif (score < 3000 )then
             endTime = math.random(3000,4200)
+        elseif (score < 5000 )then
+            endTime = 3500
         else
-            endTime = math.random(2800,3500)
+            endTime = 3000
         end	
         
         endTime = endTime * settings.gameSpeed
@@ -41,8 +43,8 @@ CreateAntLine = {
             bee:addEventListener("touch",Smash.new)
             bee:addEventListener( "sprite", SpriteAnim.spriteListener )
             toFro = function()
-                    transition.to(bee,{ x = bee.x + 200,time=1000 , onComplete = function()
-                            transition.to(bee,{ x = bee.x - 200,time=1000, onComplete = function()
+                    transition.to(bee,{ x = bee.x + 230,time=1000 , onComplete = function()
+                            transition.to(bee,{ x = bee.x - 230,time=1000, onComplete = function()
                                 toFro()
                         end})
                 end})

@@ -9,12 +9,14 @@ FlyCreate = {
         local endTime = 1500
         if (score < 1200 )then
             endTime = math.random(1500,2000)
-        elseif (score < 1800 )then
+        elseif (score < 3000 )then
             endTime = math.random(1100,1500)
-        elseif (score < 2500 )then
+        elseif (score < 5000 )then
             endTime = math.random(800,1200)
+        elseif (score < 7000 )then
+            endTime = math.random(800,1000)
         else
-            endTime = math.random(500,900)
+            endTime = 700
         end
         fly:setSequence("fly")
         fly:play()

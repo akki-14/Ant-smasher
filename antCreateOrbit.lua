@@ -12,7 +12,7 @@ CreateAntOrbit = {
         
         if( score < 1000) then
             tempTime = math.random(7000,8000)
-        elseif score < 2000 then
+        elseif score < 4000 then
             tempTime = math.random(5000,7000)
         else
             tempTime = math.random(5000,6000)
@@ -31,7 +31,7 @@ CreateAntOrbit = {
         transition.from(bee,{y = 1280,time=tempTime, onComplete = function() bee:removeSelf(); bee = nil end })
         
         circle= display.newImage(group,"images/life.png",math.random(300,450) , -300)
-        circle:scale(1.2,1.2)
+        circle:scale(1.3,1.3)
         circle.sequence = "gainLife"
         circle:addEventListener("touch",Smash.new)
         function orbit(ax,ay,ox,oy)
@@ -46,9 +46,9 @@ CreateAntOrbit = {
                 --print(px,py)
                 circle.x = px 
                 circle.y = py
-                angle = angle + 9
+                angle = angle + 8
                 if bee ~=nil then
-                    circle.tm = timer.performWithDelay(60,update)
+                    circle.tm = timer.performWithDelay(40,update)
                 end
             else
                 print("cancel transition")

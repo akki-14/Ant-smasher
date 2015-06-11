@@ -24,13 +24,13 @@ CreateAntTwin = {
             endTime = 7500
         elseif 	(score < 500 )then
             endTime = 6500
-        elseif 	(score < 800 )then
+        elseif 	(score < 1000 )then
             endTime = 5000
-        elseif 	(score < 1200 )then
+        elseif 	(score < 2000 )then
             endTime = 4500
-        elseif 	(score < 1500 )then
+        elseif 	(score < 3000 )then
             endTime = 4000
-        elseif 	(score < 2500 )then
+        elseif 	(score < 6000 )then
             endTime = 3700
         else
             endTime = 3300
@@ -65,7 +65,7 @@ CreateAntTwin = {
         transition.from(ant,{y = 1280,time=endTime, onComplete = function() SpriteAnim.endLife(ant) ; ant:removeSelf(); ant = nil end })
         transition.from(ant1,{y = 1280,time=endTime, onComplete = function() SpriteAnim.endLife(ant1) ; ant1:removeSelf(); ant1 = nil end })
         
-        if(math.random(5) == 2 ) then
+        if(math.random(6) == 2 ) then
             local bee = SpriteAnim.new2()
             local toFro
             local tempX
@@ -73,8 +73,8 @@ CreateAntTwin = {
             bee:setSequence("bee")
             bee:play()
             if math.random(2) == 1 then
-                bee.x =  display.contentCenterX - 200
-                tempX =  display.contentCenterX - 200
+                bee.x =  display.contentCenterX - 250
+                tempX =  display.contentCenterX - 250
                 
             else
                 bee.x =  display.contentCenterX 
@@ -86,9 +86,9 @@ CreateAntTwin = {
             toFro = function()
                 print("1",bee.x,bee)
                 bee.x = tempX
-                    transition.to(bee,{ x = bee.x + 200,time=1000 , onComplete = function() 
+                    transition.to(bee,{ x = bee.x + 220,time=1000 , onComplete = function() 
                         print("2",bee.x,bee)
-                            transition.to(bee,{ x = bee.x - 200,time=1000, onComplete = function()
+                            transition.to(bee,{ x = bee.x - 220,time=1000, onComplete = function()
                                 print("3",bee.x,bee)
                                 toFro()
                         end})

@@ -14,13 +14,13 @@ CreateAnt = {
             endTime = endTime - 1500
         elseif 	(score < 1000 )then
             endTime = endTime - 2500
-        elseif 	(score < 1500 )then
+        elseif 	(score < 2500 )then
             endTime = endTime - 3500
-        elseif 	(score < 2000 )then
-            endTime = endTime - 4000
         elseif 	(score < 3000 )then
+            endTime = endTime - 4000
+        elseif 	(score < 5000 )then
             endTime = endTime - 5000
-        elseif 	(score < 4000 )then
+        elseif 	(score < 7000 )then
             endTime = endTime - 4500
         else
             endTime = endTime - 4000

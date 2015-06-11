@@ -5,18 +5,14 @@ CreateAntBoss = {
         local ant = SpriteAnim.new()
         ant.taps = 0
         --ant.rotation = 180
-        local endTime = 14000
+        local endTime = 16000
         if (score < 500 )then
             endTime = endTime
         elseif 	(score < 1000 )then
-            endTime = endTime - 1500
-        elseif 	(score < 1500 )then
-            endTime = endTime - 2500
-        elseif 	(score < 2000 )then
-            endTime = endTime - 4000
-        elseif 	(score < 3000 )then
-            endTime = endTime - 5500
-        elseif 	(score < 4000 )then
+            endTime = endTime - 2000
+        elseif 	(score < 5000 )then
+            endTime = endTime - 3500
+        elseif 	(score < 8000 )then
             endTime = endTime - 7000
         else
             endTime = endTime - 8000

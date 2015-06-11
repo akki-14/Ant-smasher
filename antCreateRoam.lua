@@ -10,11 +10,11 @@ CreateAntRoam = {
             endTime = endTime - 150
         elseif 	(score < 1500 )then
             endTime = endTime - 200
-        elseif 	(score < 2000 )then
-            endTime = endTime - 350
         elseif 	(score < 3000 )then
-            endTime = endTime - 400
+            endTime = endTime - 350
         elseif 	(score < 5000 )then
+            endTime = endTime - 400
+        elseif 	(score < 7000 )then
             endTime = endTime - 500
         else
             endTime = endTime - 600
