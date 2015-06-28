@@ -5,7 +5,7 @@ require("antCreateCross")
 require("antCreateOrbit")
 require("ice")
 require("saveScore")
-require("shareApp")
+-- require("shareApp")
 require("bounce")
 require("beat")
 require("rateThisApp").rateThis("market://details?id=com.gaakapps.antsmasher")
@@ -16,6 +16,12 @@ myAds = require("myAds")
 
 local musicSound
 local gameSound
+local promotionVersion
+local promotionRefreshTime
+local promotionRefreshInterval
+
+
+
 
 score = 0
 orbitFlag = true
@@ -23,8 +29,9 @@ timerId = nil
 gamePause = false
 
 serverSettings = loadsave.loadTable("settings.json")
+promotionSettings = loadsave.loadTable("gamePromotion.json")
+
 if serverSettings ~=nil then
-	print("ffffffff",serverSettings.game_speed )
 	if serverSettings.ad_type == "vungle" then
 		myAds.initVungle()
 	-- elseif serverSettings.adtype == "chartboost" then
@@ -37,6 +44,9 @@ if serverSettings ~=nil then
 else
 	myAds.initVungle()
 end
+
+
+
 
 TOTAL_WIDTH = display.viewableContentWidth
 TOTAL_HEIGHT = display.viewableContentHeight
@@ -66,6 +76,9 @@ lifeGain = audio.loadSound( "sounds/life_gain.ogg" )
 		optionIce:storeIfNew( "background", 1 )
 		optionIce:storeIfNew( "musicSound", 1 )
 		optionIce:storeIfNew( "gameSound", 1 )
+		optionIce:storeIfNew( "promotionLastRefreshTime", os.time() )
+		optionIce:storeIfNew( "promotionVersion", 0 )
+		optionIce:storeIfNew( "promotionRefreshInterval", 100 )
 		
 		
 		-- default scores
@@ -89,6 +102,9 @@ lifeGain = audio.loadSound( "sounds/life_gain.ogg" )
 
 	musicSound = optionIce:retrieve("musicSound")
 	gameSound = optionIce:retrieve("gameSound")
+	promotionVersion = optionIce:retrieve("promotionVersion")
+	promotionRefreshTime = optionIce:retrieve("promotionLastRefreshTime")
+	promotionRefreshInterval = optionIce:retrieve("promotionRefreshInterval")
 	if musicSound == 1 then 
 		audio.setVolume(1,{channel = 1})
 	else
@@ -101,13 +117,12 @@ lifeGain = audio.loadSound( "sounds/life_gain.ogg" )
 	end		
 
 bgChannel = audio.play( mainMenuBgSound, { channel=1, loops=-1, fadein=3000 } )
-storyboard.gotoScene( "menu", "fade", 1000 )
 
 local function networkListener( event )
 	if ( event.isError ) then
 		print( "Network error!")
 	else
-		print ( "RESPONSE: " .. event.response )
+		print ( "game settings RESPONSE:"  )
 		local t = json.decode( event.response )
 
 		-- Go through the array in a loop
@@ -119,13 +134,54 @@ local function networkListener( event )
 	end
 end
 
+local function gamePromotion( event )
+	if ( event.isError ) then
+		print( "Network error!")
+	else
+
+		print ( "promotion settings RESPONSE:"  )
+		local t = json.decode( event.response )
+		-- Go through the array in a loop
+		if t then
+			if  promotionVersion < t.version or os.time() - promotionRefreshTime > promotionRefreshInterval then
+				print("NEW settings")
+				optionIce:store( "promotionVersion", t.version )
+				optionIce:store( "promotionLastRefreshTime", os.time() )
+				optionIce:store( "promotionRefreshInterval", t.refresh_interval )
+				optionIce:save()
+				for k,v in pairs(t.data) do
+					network.download( v.image_url, "GET", function(event)
+						 if ( event.isError ) then
+					        print( "Network error - download failed" )
+					    elseif ( event.phase == "began" ) then
+					        print( "Progress Phase: began" )
+					    elseif ( event.phase == "ended" ) then
+					        print( "Displaying response image file" )
+					    end
+					end, v.image_name, system.DocumentsDirectory )
+					print(k,v)
+				end	
+			else
+				print("OLD settings",promotionRefreshInterval - (os.time() - promotionRefreshTime) .. " seconds left")	
+			end	
+			if t.save_promotion then
+				print("save promotion settings")
+				loadsave.saveTable( t, "gamePromotion.json" )
+			end
+		end
+
+	end
+end
+
 
 
 network.request( "http://gaak.atwebpages.com/antsmasher.php", "GET", networkListener )
+network.request( "http://gaak.atwebpages.com/gamePromotion.php", "GET", gamePromotion )
 
+storyboard.gotoScene( "menu", "fade", 1000 )
 
-print("buffer width",bufferWidth,bufferWidthRatio)
-print("buffer height",bufferHeight,bufferHeightRatio)
-print(display.viewableContentHeight,display.viewableContentWidth)
-print(display.contentHeight,display.contentWidth)
-print(display.actualContentHeight,display.actualContentWidth)
+-- print("buffer width",bufferWidth,bufferWidthRatio)
+-- print("buffer height",bufferHeight,bufferHeightRatio)
+-- print(display.viewableContentHeight,display.viewableContentWidth)
+-- print(display.contentHeight,display.contentWidth)
+-- print(display.actualContentHeight,display.actualContentWidth)

@@ -30,12 +30,6 @@ settings = {
 	      publisherId = "com.vungle",
 	   	},
 
-
-		["CoronaProvider.ads.inneractive"] =
-        {
-            publisherId = "com.inner-active",
-        },
-
         -- FACEBOOK PLUGIN
          ["facebook"] =
         {

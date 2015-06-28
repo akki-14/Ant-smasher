@@ -2,7 +2,7 @@ require("spriteAnim")
 require("smash")
 
 CreateAnt = {
-    new = function(group,setSeq,target)
+    new = function(grp,setSeq,target)
         local ant = SpriteAnim.new()
         local valY 
         ant.taps = 0
@@ -30,7 +30,7 @@ CreateAnt = {
 
         ant:setSequence(setSeq)
         ant:play()
-        group:insert(ant)
+        grp:insert(ant)
         ant:addEventListener( "sprite", SpriteAnim.spriteListener )
         if target == nil then
             valY = 1280

@@ -34,10 +34,18 @@ local adNum
 local promoBanner
 local promoYes
 local promoNo
-local promoGroup 
-local shouldExit = false
+local promoGroup
 
 local onKeyEvent
+local exitGame
+
+--Promotions
+local promotionGroup
+local initPromotion
+local hidePromotion
+local showPromotion
+local shouldShowPromotion
+
 
 
 function onKeyEvent(event)
@@ -46,11 +54,7 @@ function onKeyEvent(event)
     
     if event.phase=="down" and event.keyName=="back" then
         --promoGroup.isVisible = true
-        if shouldExit then
-            native.requestExit()
-        end
-        native.requestExit() 
-        shouldExit = true
+        exitGame()
         return true
     end
     return false
@@ -139,11 +143,55 @@ function scene:createScene(event)
     
     timer.performWithDelay( 2000, checkLoggedIn )
     
-    
-    
 end
 
+function initPromotion( )
+    if promotionSettings and promotionSettings.show_promotion == true then
+        local promoAppsView = require("promoAppsView")  
+        local allPromotionGames = promotionSettings.data
+        local myImages = {}
+        if allPromotionGames then
+            promotionGroup = promoAppsView.new( allPromotionGames,promotionSettings.image_path )
+            bgGroup:insert(promotionGroup)
+        end       
+    end
+end
 
+function show_promotion()
+    if promotionGroup then
+        promotionGroup.isVisible = true
+    else
+        initPromotion()
+    end
+end
+
+function hidePromotion()
+    promotionGroup.isVisible = false
+end
+
+function shouldShowPromotion()
+    local defaultReshow = 10
+    if promotionSettings and promotionSettings.reshow_interval then
+        defaultReshow = promotionSettings.reshow_interval
+    end
+
+    local time = optionIce:retrieve("promtionShowTime")
+    if not time then
+        optionIce:store( "promtionShowTime", os.time() )
+        optionIce:save()
+        return true
+    else
+        local timeDiff = os.difftime(os.time() - time)
+        if timeDiff > defaultReshow then
+            optionIce:store( "promtionShowTime", os.time() )
+            optionIce:save()
+            return true
+        else
+            print(defaultReshow - timeDiff,"seconds left to show promotions")
+            return false
+        end       
+    end
+end
 
 
 function scene:enterScene(event)
@@ -262,11 +310,7 @@ function scene:enterScene(event)
                 if(event.x > bounds.xMin  and event.x < bounds.xMax) then
                     if  (event.y > bounds.yMin  and event.y < bounds.yMax) then
                         SoundControl.Menu()
-                        --storyboard.gotoScene( "restartView", "fade", 1000 )
-                        
-                        --promoGroup.isVisible = true
-                        native.requestExit()
-                        
+                        exitGame()
                     end
                 end
                 bgExitBack.isVisible = false
@@ -296,7 +340,6 @@ function scene:enterScene(event)
     end
     
     local function highScore(event)
-        
         
         local target = event.target
         local bounds = target.contentBounds
@@ -490,6 +533,7 @@ function scene:enterScene(event)
 end
 
 
+
 function scene:exitScene(event)
     
     
@@ -502,6 +546,14 @@ function scene:destroyScene(event)
     print("destroy")
 end
 
+function exitGame()
+    if shouldShowPromotion() then
+        show_promotion()
+    else
+        print("exit game")
+        native.requestExit()    
+    end
+end
 
 
 scene:addEventListener( "createScene", scene )
