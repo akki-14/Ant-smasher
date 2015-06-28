@@ -123,6 +123,9 @@ Smash = {
 				elseif getSeq == "scorpio" then
 					score = score + 30
 					SoundControl.Smash(getSeq)
+				elseif getSeq == "frog" then
+					score = score + 30
+					SoundControl.Smash(getSeq)
 				elseif getSeq == "antBoss" and 	target.taps == 3 then
 					score = score + 50
 					SoundControl.Smash(getSeq)

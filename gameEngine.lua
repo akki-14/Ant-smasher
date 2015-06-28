@@ -12,12 +12,19 @@ require("antCreateBoss")
 require("antCreateKing")
 require("frog")
 require("gainLife")
-
+local powers = require("powers")
 local gameEngineTimer = nil
 local tempGroup
+local antGroup = display.newGroup()
+local powerGroup = display.newGroup()
+local onEnterFrame
+local powerThunder
+
 GameEngine = {
     new = function(group)
         tempGroup = group
+        group:insert(antGroup)
+        group:insert(powerGroup)
         local calculate
         local seq = {"ant1","ant2","scorpio","antBoss"}
         local type1
@@ -219,7 +226,7 @@ GameEngine = {
         end
         
         function aaa(event)
-            CreateAnt.new(group,seq[1])
+            CreateAnt.new(antGroup,seq[1])
             Frog.new(tempGroup,"frog")
             --CreateAntBoss.new(group,seq[4])
             --CreateAntRoam.new(group,seq[4],200)
@@ -229,7 +236,7 @@ GameEngine = {
             --FlyCreate.new(group,seq[1])
             if(event.count == 2) then
                 local temp = function(event)
-                    calculate(score,10)
+                     calculate(score,10)
                 end
                 
                 gameEngineTimer = timer.performWithDelay(math.random(2000,3200),temp)
@@ -238,6 +245,10 @@ GameEngine = {
         end
         
         gameEngineTimer = timer.performWithDelay(math.random(1500,2500),aaa,2)
+
+        
+--        powerThunder = powers:initThunder()
+--        powerGroup:insert(powerThunder)
     end,
     pause = function (view)
         timer.pause( gameEngineTimer )
