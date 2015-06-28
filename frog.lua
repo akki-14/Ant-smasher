@@ -51,14 +51,14 @@ Frog = {
         frog.x = math.random(50,680)
 
         function jump()
-        frog:play()
-        transition.to(frog,{y = frog.y - hopValue, time = endTime, onComplete = function() 
-                if frog.y <= finalPoint then
-                    SpriteAnim.endLife(frog) ; frog:removeSelf(); frog = nil ;
-                    timer.cancel(jumpTimer)
-                end
-                     end })
-       end
+            frog:play()
+            transition.to(frog,{y = frog.y - hopValue, time = endTime, onComplete = function() 
+                    if frog.y <= finalPoint then
+                        SpriteAnim.endLife(frog) ; frog:removeSelf(); frog = nil ;
+                        timer.cancel(jumpTimer)
+                    end
+                         end })
+        end
        jumpTimer = timer.performWithDelay( hopDelay, jump,-1 )
             -- transition.to(frog,{ y = frog.y - hopValue, time = endTime , onComplete = function ()
             -- })

@@ -13,16 +13,19 @@ require("antCreateKing")
 require("frog")
 require("gainLife")
 local powers = require("powers")
+local roamingBomb = require("roamingBomb")
 local gameEngineTimer = nil
 local tempGroup
-local antGroup = display.newGroup()
-local powerGroup = display.newGroup()
+local antGroup 
+local powerGroup
 local onEnterFrame
 local powerThunder
 
 GameEngine = {
     new = function(group)
         tempGroup = group
+        antGroup = display.newGroup()
+        powerGroup = display.newGroup()
         group:insert(antGroup)
         group:insert(powerGroup)
         local calculate
@@ -185,30 +188,30 @@ GameEngine = {
                 local antType = ant.category
                 local delay = nil
                 if antPattern == NORMAL_ANT then
-                    CreateAnt.new(group,seq[math.random(2)])
+                    CreateAnt.new(antGroup,seq[math.random(2)])
                 elseif antPattern == TWIN_ANT then
-                    CreateAntTwin.new(group,seq[math.random(2)])
+                    CreateAntTwin.new(antGroup,seq[math.random(2)])
                 elseif antPattern == LINE_ANT then
-                    CreateAntLine.new(group,seq[math.random(2)],posX)
+                    CreateAntLine.new(antGroup,seq[math.random(2)],posX)
                 elseif antPattern == FREE_ROAM_ANT then
-                    CreateAntRoam.new(group,seq[1],posX)
+                    CreateAntRoam.new(antGroup,seq[1],posX)
                 elseif antPattern == ZIG_ZAG_ANT then
-                    CreateAntZigZag.new(group,seq[math.random(2)])
+                    CreateAntZigZag.new(antGroup,seq[math.random(2)])
                 elseif antPattern == CROSSING_ANT then
-                    CreateAntCross.new(group,seq[math.random(3)])
+                    CreateAntCross.new(antGroup,seq[math.random(3)])
                 elseif antPattern == ANT_WITH_ORBIT then
-                    CreateAntOrbit.new(group,"bee")
+                    CreateAntOrbit.new(antGroup,"bee")
                 elseif antPattern == FAST_ANT then
-                    CreateAntFast.new(group,seq[math.random(3)])
+                    CreateAntFast.new(antGroup,seq[math.random(3)])
                 elseif antPattern == FLY_ROUTE then
-                    FlyCreate.new(group,"fly")
+                    FlyCreate.new(antGroup,"fly")
                 elseif antPattern == S_SHAPE_ANT then
-                    CreateAntSShape.new(group,seq[math.random(2)])
+                    CreateAntSShape.new(antGroup,seq[math.random(2)])
                 elseif antPattern == BOSS_ANT then
                     CreateAntBoss.new(group,seq[4])
                     delay = 5000
                 elseif antPattern == KING_ANT then
-                    CreateKingAnt.new(group,seq[math.random(2)])
+                    CreateKingAnt.new(antGroup,seq[math.random(2)])
                 end
                 
                 
@@ -246,7 +249,7 @@ GameEngine = {
         
         gameEngineTimer = timer.performWithDelay(math.random(1500,2500),aaa,2)
 
-        
+        roamingBomb.start(antGroup, nil)
 --        powerThunder = powers:initThunder()
 --        powerGroup:insert(powerThunder)
     end,

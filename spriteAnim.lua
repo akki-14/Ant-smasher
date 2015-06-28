@@ -139,7 +139,6 @@ SpriteAnim = {
 	local spriteSheet = graphics.newImageSheet( "sprites/frog_sprite.png", sheetData )
   	local spriteSet = display.newSprite( spriteSheet, sequenceData )
 	spriteSet.y = -40
-	
 	return spriteSet
   end,
   

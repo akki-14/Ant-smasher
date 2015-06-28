@@ -50,6 +50,8 @@ end
 
 TOTAL_WIDTH = display.viewableContentWidth
 TOTAL_HEIGHT = display.viewableContentHeight
+CENTER_X = display.contentCenterX
+CENTER_Y = display.contentCenterY
 bufferWidth = (display.contentWidth - display.viewableContentWidth ) / 2
 bufferWidthRatio = display.viewableContentWidth / display.contentWidth 
 bufferHeight = (display.contentHeight - display.viewableContentHeight ) / 2
